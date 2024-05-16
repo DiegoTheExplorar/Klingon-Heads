@@ -3,12 +3,19 @@ import torch.nn as nn
 class Encoder(nn.Module):
     """
     Seq2Seq Encoder for GRU model
-
-    int input_dim: Size of input
-    int emb_dim: No.of dimensons of embedding vectors
-    int hid_dim : No.of features in GRU's hidden state
-    int n_layers : No.of GRU layers (Probably will be using 2)
-    double dropout: Dropout probability of a neuron
+    
+    Parameters:
+    ----------
+    input_dim : int
+        Size of the input vocabulary
+    emb_dim : int
+        Dimension of the embedding vectors
+    hid_dim : int
+        Number of features in the GRU's hidden state
+    n_layers : int
+        Number of GRU layers (typically 2)
+    dropout : float
+        Dropout probability for the dropout layer
     """
     def __init__(self, input_dim, emb_dim, hid_dim, n_layers, dropout):
         super().__init__()
@@ -20,12 +27,22 @@ class Encoder(nn.Module):
         self.dropout = nn.Dropout(dropout)
     
     """
-    Forward Pro
-    """
-    def forward(self, src):
-
-        embedded = self.dropout(self.embedding(src))
-
+        Forward propagation step of encoding
+        
+        Parameters:
+        ----------
+        input : Tensor
+            Input tensor containing token indices (seq_len, batch_size)
+        
+        Returns:
+        -------
+        hidden : Tensor
+            Hidden state tensor from the GRU (n_layers, batch_size, hid_dim)
+        """
+    def forward(self, input):
+        #input is converted into embeddings and dropout probability is applied
+        embedded = self.dropout(self.embedding(input))
+        #forward pass into GRU
         outputs, hidden = self.rnn(embedded)
-
+        #only hidden state is required for encoding
         return hidden
