@@ -2,7 +2,8 @@ import torch.nn as nn
 
 class Encoder(nn.Module):
     """
-    Seq2Seq Encoder for GRU model
+    Seq2Seq Encoder for GRU model. I want to store any kind
+    of sequenital information to be passed on to the decoder
     
     Parameters:
     ----------
