@@ -22,6 +22,9 @@ class Encoder(nn.Module):
         super().__init__()
         # Embedding layer
         self.embedding = nn.Embedding(input_dim, emb_dim)
+        self.hid_dim = hid_dim
+        self.n_layers = n_layers
+        self
         # GRU layer
         self.rnn = nn.GRU(emb_dim, hid_dim, n_layers, dropout=dropout)
         # Dropout layer
@@ -41,9 +44,9 @@ class Encoder(nn.Module):
             Hidden state tensor from the GRU (n_layers, batch_size, hid_dim)
         """
     def forward(self, input):
-        #input is converted into embeddings and dropout probability is applied
-        embedded = self.dropout(self.embedding(input))
-        #forward pass into GRU
-        outputs, hidden = self.rnn(embedded)
+        #input is converted into embeddings 
+        embedded = self.embedding(input)
+        #forward pass into GRU and dropout probability is applied
+        outputs, hidden = self.dropout(self.rnn(embedded))
         #only hidden state is required for encoding
         return hidden

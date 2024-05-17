@@ -14,9 +14,8 @@ class Seq2SeqModel(nn.Module):
         self.decoder = decoder
         self.device = device
         # cause encoder and decoder must have same no.of layers
-        assert (encoder.hidden_dim == decoder.hidden_dim), "Hidden dimensions of encoder and decoder not equal"
-        assert (
-            encoder.n_layers == decoder.n_layers), "Encoder and decoder layers not equal"
+        assert (encoder.hid_dim == decoder.hid_dim), "Hidden dimensions of encoder and decoder not equal"
+        assert (encoder.n_layers == decoder.n_layers), "Encoder and decoder layers not equal"
 
     """
         Parameters:
@@ -52,7 +51,7 @@ class Seq2SeqModel(nn.Module):
         input = trg[0, :]
         for t in range(1, trg_length):
            #forward pass through decoder. hidden here refers to context vector from
-           #encoder
+           #encoder. hidden keeps getting updated
             output, hidden = self.decoder(input, hidden)
             
             #Here I am just storing all the predictions made
