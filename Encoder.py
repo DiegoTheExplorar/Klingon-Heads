@@ -45,8 +45,8 @@ class Encoder(nn.Module):
         """
     def forward(self, input):
         #input is converted into embeddings 
-        embedded = self.embedding(input)
+        embedded = self.dropout(self.embedding(input))
         #forward pass into GRU and dropout probability is applied
-        outputs, hidden = self.dropout(self.rnn(embedded))
+        outputs, hidden = self.rnn(embedded)
         #only hidden state is required for encoding
         return hidden
