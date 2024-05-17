@@ -22,6 +22,7 @@ class Decoder(nn.Module):
     def __init__(self, output_dim, emb_dim, hid_dim, n_layers, dropout):
         super().__init__()
         self.hid_dim = hid_dim
+        self.output_dim = output_dim
         self.n_layers = n_layers
         self.embedding = nn.Embedding(output_dim, emb_dim)
         self.rnn = nn.GRU(emb_dim, hid_dim, n_layers, dropout=dropout)
