@@ -7,7 +7,7 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 # Load dataset
 data = pd.read_csv('English_To_Klingon.csv')
 
-# separate the sentences
+# separate the sentencesS
 english_sentences = data['english'].values
 klingon_sentences = data['klingon'].values
 
