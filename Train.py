@@ -98,8 +98,8 @@ with torch.no_grad():
 
         output = model(src, trg_input, teacher_forcing_ratio=0)  # Turn off teacher forcing during evaluation
 
-        output = output[1:].view(-1, output_dim)
-        trg = trg[1:].view(-1)
+        output = output[1:].reshape(-1, output_dim)
+        trg = trg[1:].reshape(-1)
 
         loss = criterion(output, trg)
 
