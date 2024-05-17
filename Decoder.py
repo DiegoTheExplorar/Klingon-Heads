@@ -1,3 +1,4 @@
+import torch.nn as nn
 class Decoder(nn.Module):
     """
     Initailising GRU Decoder. Based on the hidden state(context vector)
@@ -20,6 +21,8 @@ class Decoder(nn.Module):
     """
     def __init__(self, output_dim, emb_dim, hid_dim, n_layers, dropout):
         super().__init__()
+        self.hid_dim = hid_dim
+        self.n_layers = n_layers
         self.embedding = nn.Embedding(output_dim, emb_dim)
         self.rnn = nn.GRU(emb_dim, hid_dim, n_layers, dropout=dropout)
         self.fc_out = nn.Linear(hid_dim, output_dim)
@@ -34,7 +37,7 @@ class Decoder(nn.Module):
             Hidden tensor containing token indices (seq_len, batch_size)
             This is what our encoder returns
         
-        trg : Tensort
+        trg : Tensor
             Target tensor containing token indices (seq_len, batch_size)
             This is what our tokenized Klingon Data
         
