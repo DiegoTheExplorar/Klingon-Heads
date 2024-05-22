@@ -1,3 +1,6 @@
+"""
+Non functioning to be removed after inference step works
+"""
 import torch
 from DataPreprocessing import preprocess
 def translate_sentence(model, src_sentence, src_vocab, trg_vocab, device, max_len=50):
