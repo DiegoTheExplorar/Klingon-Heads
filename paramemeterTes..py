@@ -1,4 +1,7 @@
+"""
+Not in use yet. Only to be used when finetuning model
 
+"""
 for batch_size in [32, 64, 128]:
     for epochs in [20, 50, 100]:
         print(f'Training with batch size: {batch_size} and epochs: {epochs}')
