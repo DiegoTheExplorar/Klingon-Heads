@@ -56,11 +56,11 @@ class Decoder(nn.Module):
         trg = trg.unsqueeze(0)
         #input is converted into embeddings and dropout probability is applied
         embedded = self.dropout(self.embedding(trg))
-        print("Embedded shape:", embedded.shape)
+        #print("Embedded shape:", embedded.shape)
         #GRU layer computes new context based on previous context
         output, hidden = self.rnn(embedded, hidden)
-        print("Output shape after RNN:", output.shape)
+        #print("Output shape after RNN:", output.shape)
         #predicts output from GRU
         prediction = self.fc_out(output.squeeze(0))
-        print("Output shape after fc_out:", output.shape)
+        #print("Output shape after fc_out:", output.shape)
         return prediction, hidden
