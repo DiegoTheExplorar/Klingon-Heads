@@ -26,9 +26,9 @@ dropout = 0.5
 #to the decoder during training, as opposed to using the decoder's own previous prediction. 
 teacher_forcing_ratio = 0.5
 #no.of times model is pushed through the dataset
-epoch_count = 5
+epoch_count = 25
 #batch size is just the number of subsets of the dataset to be pushed through
-batch_size = 64
+batch_size = 16
 #using encoder, decoder and intialising a Seq2Seq model
 encoder = Encoder(input_dim, emb_dim, hid_dim, n_layers, dropout).to(device)
 decoder = Decoder(output_dim, emb_dim, hid_dim, n_layers, dropout).to(device)
