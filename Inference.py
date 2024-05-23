@@ -56,7 +56,7 @@ def translate_english_to_klingon(english_sentence):
     output_indices = torch.argmax(output, dim=-1).squeeze().tolist()
     klingon_sentence = ' '.join([klingon_tokenizer.index_word[idx] for idx in output_indices if idx != 0])  # Remove padding token
     return klingon_sentence
-"""
+
 
 # Create Gradio interface
 iface = gr.Interface(fn=translate_english_to_klingon, inputs="text", outputs="text", title="English to Klingon Translation")
@@ -65,4 +65,4 @@ iface.launch()
 english_sentence = 'hello. nice to meet you'
 print('english sentence',english_sentence)
 print('translated',translate_english_to_klingon(english_sentence))
-
+"""
