@@ -52,4 +52,3 @@ def preprocess():
             english_train_padded, klingon_train_input, klingon_train_target,
             english_test_padded, klingon_test_input, klingon_test_target)
 
-# Now you can call preprocess() to get your preprocessed data ready for training.

@@ -60,7 +60,7 @@ def translate_english_to_klingon(english_sentence):
 
 # Create Gradio interface
 iface = gr.Interface(fn=translate_english_to_klingon, inputs="text", outputs="text", title="English to Klingon Translation")
-iface.launch()
+iface.launch(share = True)
 """
 english_sentence = 'hello. nice to meet you'
 print('english sentence',english_sentence)

@@ -89,7 +89,6 @@ for epoch in range(epoch_count):
 torch.save(model.state_dict(), 'English_to_Klingon.pth')
 
 print('Now starting eval process')
- # Assuming you have evaluation data preprocessed and loaded into evaluation_loader
 evaluation_dataset = TensorDataset(torch.tensor(english_test_padded, dtype=torch.long),
                                     torch.tensor(klingon_test_input, dtype=torch.long),
                                     torch.tensor(klingon_test_target, dtype=torch.long))
