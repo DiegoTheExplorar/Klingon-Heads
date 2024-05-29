@@ -5,7 +5,8 @@ import tensorflow as tf
 
 def preprocess():
     # Load dataset
-    data = pd.read_csv('English_To_Klingon.csv')
+    data = pd.read_csv('./Model/English_To_Klingon.csv')
+
 
     # Append <BOS> and <EOS> tags to the Klingon sentences
     data['klingon'] = data['klingon'].apply(lambda x: '<BOS> ' + x + ' <EOS>')
