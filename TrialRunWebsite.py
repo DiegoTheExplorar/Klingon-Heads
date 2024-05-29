@@ -1,7 +1,11 @@
-from flask import Flask, request, jsonify
-from FlaskInference import translate_english_to_klingon 
+from flask import Flask, request, jsonify, send_from_directory
+from FlaskInference import translate_english_to_klingon
 
 app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return send_from_directory('static', 'index.html')
 
 @app.route('/translate', methods=['POST'])
 def translate():
