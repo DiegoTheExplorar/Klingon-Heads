@@ -2,11 +2,12 @@ import torch
 import tensorflow as tf
 import gradio as gr
 
-from Seq2SeqModel import Seq2SeqModel  # Custom Seq2Seq model class
-from DataPPwithspecial import preprocess  # Custom preprocessing function
+from Seq2SeqModel import Seq2SeqModel 
+from DataPPwithspecial import preprocess 
 from Decoder import Decoder
 from Encoder import Encoder
-
+import os
+print("Files in current directory:", os.listdir('.'))
 # Model parameters
 n_layers = 2
 emb_dim = 256
@@ -28,7 +29,7 @@ decoder = Decoder(output_dim, emb_dim, hid_dim, n_layers, dropout).to(device)
 model = Seq2SeqModel(encoder, decoder, device).to(device)
 
 # Load the saved model
-model.load_state_dict(torch.load('English_to_Klingon.pth'))
+model.load_state_dict(torch.load('./Model/English_to_Klingon.pth'))
 model.eval()  # Set the model to evaluation mode
 
 #tokenize the English input
