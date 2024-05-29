@@ -1,11 +1,11 @@
 import torch
 import tensorflow as tf
-import gradio as gr
 
 from Seq2SeqModel import Seq2SeqModel 
 from DataPPwithspecial import preprocess 
 from Decoder import Decoder
 from Encoder import Encoder
+
 # Model parameters
 n_layers = 2
 emb_dim = 256
@@ -27,7 +27,7 @@ decoder = Decoder(output_dim, emb_dim, hid_dim, n_layers, dropout).to(device)
 model = Seq2SeqModel(encoder, decoder, device).to(device)
 
 # Load the saved model
-model.load_state_dict(torch.load('English_to_Klingon.pth'))
+model.load_state_dict(torch.load('./backend/English_to_Klingon.pth'))
 model.eval()  # Set the model to evaluation mode
 
 #tokenize the English input
@@ -55,13 +55,3 @@ def translate_english_to_klingon(english_sentence):
     output_indices = torch.argmax(output, dim=-1).squeeze().tolist()
     klingon_sentence = ' '.join([klingon_tokenizer.index_word[idx] for idx in output_indices if idx != 0])  # Remove padding token
     return klingon_sentence
-
-
-# Create Gradio interface
-iface = gr.Interface(fn=translate_english_to_klingon, inputs="text", outputs="text", title="English to Klingon Translation")
-iface.launch()
-"""
-english_sentence = 'hello. nice to meet you'
-print('english sentence',english_sentence)
-print('translated',translate_english_to_klingon(english_sentence))
-"""
