@@ -55,15 +55,29 @@ def translate_english_to_klingon(english_sentence):
     # Convert output indices to Klingon words
     output_indices = torch.argmax(output, dim=-1).squeeze().tolist()
     klingon_sentence = ' '.join([klingon_tokenizer.index_word[idx] for idx in output_indices if idx != 0])  # Remove padding token
+    #regex to remove eos
     klingon_sentence = re.sub(r'\beos\b', '', klingon_sentence).strip()
     return klingon_sentence
 
 
 # Create Gradio interface
-iface = gr.Interface(fn=translate_english_to_klingon, inputs="text", outputs="text", title="English to Klingon Translation")
+examples = [
+    ["Hello, how are you?"],
+    ["What is your name?"],
+    ["I love learning new languages."],
+    ["Where is the nearest starbase?"],
+    ["Can you tell me more about your planet?"]
+]
+
+iface = gr.Interface(
+    fn=translate_english_to_klingon,
+    inputs=gr.Textbox(label = "English Phrase",lines=2, placeholder="Enter English text here..."),
+    outputs=gr.Textbox(label="Klingon Translation",lines=2),
+    title="English to Klingon Translation",
+    description="Enter text in English and get its translation in Klingon. This translator helps you convert everyday English phrases into the fictional language spoken by the Klingon species in the Star Trek universe. Try one of the example sentences to see how it works!",
+    examples=examples,
+    theme="default"
+)
+
 iface.launch()
-"""
-english_sentence = 'hello. nice to meet you'
-print('english sentence',english_sentence)
-print('translated',translate_english_to_klingon(english_sentence))
-"""
+
