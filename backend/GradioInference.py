@@ -1,6 +1,7 @@
 import torch
 import tensorflow as tf
 import gradio as gr
+import re
 
 from Seq2SeqModel import Seq2SeqModel 
 from DataPPwithspecial import preprocess 
@@ -54,6 +55,7 @@ def translate_english_to_klingon(english_sentence):
     # Convert output indices to Klingon words
     output_indices = torch.argmax(output, dim=-1).squeeze().tolist()
     klingon_sentence = ' '.join([klingon_tokenizer.index_word[idx] for idx in output_indices if idx != 0])  # Remove padding token
+    klingon_sentence = re.sub(r'\beos\b', '', klingon_sentence).strip()
     return klingon_sentence
 
 

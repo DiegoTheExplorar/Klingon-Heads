@@ -1,3 +1,4 @@
+import re
 import torch
 import tensorflow as tf
 
@@ -30,7 +31,7 @@ model = Seq2SeqModel(encoder, decoder, device).to(device)
 model.load_state_dict(torch.load('./backend/English_to_Klingon.pth'))
 model.eval()  # Set the model to evaluation mode
 
-#tokenize the English input
+# Tokenize the English input
 def preprocess_sentence(sentence, tokenizer, max_length):
     # Tokenize the sentence
     tokenized_sentence = tokenizer.texts_to_sequences([sentence])
@@ -54,4 +55,7 @@ def translate_english_to_klingon(english_sentence):
     # Convert output indices to Klingon words
     output_indices = torch.argmax(output, dim=-1).squeeze().tolist()
     klingon_sentence = ' '.join([klingon_tokenizer.index_word[idx] for idx in output_indices if idx != 0])  # Remove padding token
+
+    # Remove the word 'eos' using regex
+    klingon_sentence = re.sub(r'\beos\b', '', klingon_sentence).strip()
     return klingon_sentence
