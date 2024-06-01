@@ -28,6 +28,7 @@ class Encoder(nn.Module):
         self.rnn = nn.GRU(emb_dim, hid_dim, n_layers, dropout=dropout)
         # Dropout layer
         self.dropout = nn.Dropout(dropout)
+        self.fc = nn.Linear(hid_dim * 2, hid_dim)
     
     """
         Forward propagation step of encoding
@@ -46,6 +47,5 @@ class Encoder(nn.Module):
         #input is converted into embeddings 
         embedded = self.dropout(self.embedding(input))
         #forward pass into GRU and dropout probability is applied
-        _ , hidden = self.rnn(embedded)
-        #only hidden state is required for encoding
-        return hidden
+        hidden = torch.tanh(self.fc(torch.cat((hidden[-2,:,:], hidden[-1,:,:]), dim=1)))
+        return outputs, hidden.unsqueeze(0)
