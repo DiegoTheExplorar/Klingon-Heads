@@ -7,6 +7,7 @@ from Seq2SeqModel import Seq2SeqModel
 from DataPPwithspecial import preprocess 
 from Decoder import Decoder
 from Encoder import Encoder
+
 # Model parameters
 n_layers = 2
 emb_dim = 256
@@ -27,11 +28,11 @@ decoder = Decoder(output_dim, emb_dim, hid_dim, n_layers, dropout).to(device)
 # Initialize the Seq2SeqModel
 model = Seq2SeqModel(encoder, decoder, device).to(device)
 
-# Load the saved model
-model.load_state_dict(torch.load('./backend/English_to_Klingon.pth'))
+# Load the saved model, mapping it to the CPU if necessary
+model.load_state_dict(torch.load('./backend/English_to_Klingon.pth', map_location=torch.device('cpu')))
 model.eval()  # Set the model to evaluation mode
 
-#tokenize the English input
+# Tokenize the English input
 def preprocess_sentence(sentence, tokenizer, max_length):
     # Tokenize the sentence
     tokenized_sentence = tokenizer.texts_to_sequences([sentence])
@@ -55,10 +56,9 @@ def translate_english_to_klingon(english_sentence):
     # Convert output indices to Klingon words
     output_indices = torch.argmax(output, dim=-1).squeeze().tolist()
     klingon_sentence = ' '.join([klingon_tokenizer.index_word[idx] for idx in output_indices if idx != 0])  # Remove padding token
-    #regex to remove eos
+    # Regex to remove eos
     klingon_sentence = re.sub(r'\beos\b', '', klingon_sentence).strip()
     return klingon_sentence
-
 
 # Create Gradio interface
 examples = [
@@ -71,13 +71,12 @@ examples = [
 
 iface = gr.Interface(
     fn=translate_english_to_klingon,
-    inputs=gr.Textbox(label = "English Phrase",lines=2, placeholder="Enter English text here..."),
-    outputs=gr.Textbox(label="Klingon Translation",lines=2),
+    inputs=gr.Textbox(label="English Phrase", lines=2, placeholder="Enter English text here..."),
+    outputs=gr.Textbox(label="Klingon Translation", lines=2),
     title="English to Klingon Translation",
     description="Enter text in English and get its translation in Klingon. This translator helps you convert everyday English phrases into the fictional language spoken by the Klingon species in the Star Trek universe. Try one of the example sentences to see how it works!",
     examples=examples,
     theme="default"
 )
 
-iface.launch(share = True)
-
+iface.launch(share=True)
