@@ -10,5 +10,5 @@
     }
   </style>
   
-  <iframe src="https://d397be7984525d1e0b.gradio.live" title="Gradio Interface"></iframe>
+  <iframe src="https://huggingface.co/spaces/DiegoTheExplorar/KlingonHeads" title="Gradio Interface"></iframe>
   
