@@ -1,15 +1,24 @@
-import { Client } from "@gradio/client";
 import React, { useState } from 'react';
-import HistoryPage from './HistoryPage'; // Import the HistoryPage component
-import './Translator.css'; // Import the CSS file
+import { useNavigate } from 'react-router-dom';
+import HistoryPage from './HistoryPage';
+import './Translator.css';
 
 function Translator() {
   const [input, setInput] = useState('');
   const [translation, setTranslation] = useState('');
-  const [history, setHistory] = useState([]); // State to keep track of history
-  const [favourites, setFavourites] = useState([]); // State to keep track of favourites
-  const [translateToKlingon, setTranslateToKlingon] = useState(true); // State to toggle translation direction
-  const [showHistory, setShowHistory] = useState(false); // State to control showing the history
+  const [history, setHistory] = useState([]);
+  const [favourites, setFavourites] = useState([]);
+  const [translateToKlingon, setTranslateToKlingon] = useState(true);
+  const [showHistory, setShowHistory] = useState(false);
+
+  const navigate = useNavigate(); // Hook for navigation
+
+  // Function to handle sign-out
+  const handleSignOut = () => {
+    // Clear stored user info like email or auth tokens
+    localStorage.removeItem('email'); 
+    navigate('/'); // Navigate back to sign-in page
+  };
 
   const translateText = async () => {
     if (!input.trim()) {
@@ -37,7 +46,7 @@ function Translator() {
 
   const toggleTranslationDirection = () => {
     setTranslateToKlingon(!translateToKlingon);
-    setInput(translation); // Swap input and translation fields
+    setInput(translation);
     setTranslation('');
   };
 
@@ -97,6 +106,11 @@ function Translator() {
           className="clear-button"
           onClick={clearTextAreas}>
           Clear
+        </button>
+        <button 
+          className="sign-out-button"
+          onClick={handleSignOut}>
+          Sign Out
         </button>
       </div>
       {showHistory && <HistoryPage history={history} />}
