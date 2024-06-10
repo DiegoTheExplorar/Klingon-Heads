@@ -104,3 +104,13 @@ button:hover {
 .icon:hover {
   color: #646cff;
 }
+
+.input {
+  background-color: white; /* Set background to white */
+  color: black; /* Set text color to black */
+  border: 1px solid #ccc; /* Standard light grey border */
+  padding: 10px; /* Padding for spacing inside the box */
+  font-size: 16px; /* Readable text size */
+  border-radius: 4px; /* Rounded corners for modern look */
+}
+
