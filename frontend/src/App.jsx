@@ -1,7 +1,9 @@
 import React from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import HistoryPage from './HistoryPage'; // Import the HistoryPage
+import Auth from './Auth';
+import HistoryPage from './HistoryPage';
 import LandingPage from './LandingPage';
+import PrivateRoute from './PrivateRoute';
 import Translator from './Translator';
 
 const App = () => {
@@ -9,9 +11,14 @@ const App = () => {
     <Router>
       <div>
         <Routes>
-          <Route exact path="/" element={<LandingPage />} />
-          <Route path="/translator" element={<Translator />} />
-          <Route path="/history" element={<HistoryPage />} /> {/* Route for the History Page */}
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/translator" element={
+            <PrivateRoute>
+              <Translator />
+            </PrivateRoute>
+          } />
+          <Route path="/history" element={<HistoryPage />} />
+          <Route path="/auth" element={<Auth />} /> {/* Route for Authentication */}
         </Routes>
       </div>
     </Router>
