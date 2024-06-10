@@ -1,23 +1,22 @@
+import { Client } from "@gradio/client";
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import HistoryPage from './HistoryPage';
-import './Translator.css';
+import './Translator.css'; // Import the CSS file
 
 function Translator() {
   const [input, setInput] = useState('');
   const [translation, setTranslation] = useState('');
-  const [history, setHistory] = useState([]);
-  const [favourites, setFavourites] = useState([]);
-  const [translateToKlingon, setTranslateToKlingon] = useState(true);
-  const [showHistory, setShowHistory] = useState(false);
+  const [history, setHistory] = useState([]); // State to keep track of history
+  const [favourites, setFavourites] = useState([]); // State to keep track of favourites
+  const [translateToKlingon, setTranslateToKlingon] = useState(true); // State to toggle translation direction
+  const [showHistory, setShowHistory] = useState(false); // State to control showing the history
+  const navigate = useNavigate();
 
-  const navigate = useNavigate(); // Hook for navigation
-
-  // Function to handle sign-out
   const handleSignOut = () => {
     // Clear stored user info like email or auth tokens
-    localStorage.removeItem('email'); 
-    navigate('/'); // Navigate back to sign-in page
+    localStorage.removeItem('email'); // Assuming email is stored in localStorage
+    navigate('/signin'); // Navigate back to sign-in page
   };
 
   const translateText = async () => {
@@ -46,7 +45,7 @@ function Translator() {
 
   const toggleTranslationDirection = () => {
     setTranslateToKlingon(!translateToKlingon);
-    setInput(translation);
+    setInput(translation); // Swap input and translation fields
     setTranslation('');
   };
 
