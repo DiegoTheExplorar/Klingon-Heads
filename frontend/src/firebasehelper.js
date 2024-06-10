@@ -1,5 +1,5 @@
 import { getAuth } from "firebase/auth"; // Import the getAuth function to access Firebase authentication
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, } from "firebase/firestore";
 import { database } from "./firebaseConfig";
 
 
@@ -87,3 +87,22 @@ export async function getHistory() {
       throw new Error(`Failed to retrieve history: ${error.message}`);
   }
 }
+
+export async function removeFavoriteFromFirestore(id) {
+  const auth = getAuth();
+  const currentUser = auth.currentUser;
+
+  if (!currentUser) {
+      throw new Error('User not authenticated.');
+  }
+
+  const userFavoritesRef = collection(database, 'users', currentUser.uid, 'favourites');
+  const favoriteDocRef = doc(userFavoritesRef, id);
+
+  try {
+      await deleteDoc(favoriteDocRef);
+  } catch (error) {
+      throw new Error(`Failed to remove favorite: ${error.message}`);
+  }
+}
+

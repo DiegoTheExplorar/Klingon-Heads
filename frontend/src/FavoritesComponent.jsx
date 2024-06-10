@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getAllFavorites } from './firebasehelper';
+import { getAllFavorites, removeFavoriteFromFirestore } from './firebasehelper';
 
 function FavoritesComponent() {
     const [favorites, setFavorites] = useState([]);
@@ -16,6 +16,15 @@ function FavoritesComponent() {
         });
     }, []);
 
+    const handleUnfavorite = async (id) => {
+        try {
+            await removeFavoriteFromFirestore(id);
+            setFavorites(prevFavorites => prevFavorites.filter(fav => fav.id !== id));
+        } catch (error) {
+            setError(error.message);
+        }
+    };
+
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
 
@@ -24,7 +33,12 @@ function FavoritesComponent() {
             <h2>Your Favorites</h2>
             <ul>
                 {favorites.map(fav => (
-                    <li key={fav.id}>{fav.input} - {fav.translation}</li>
+                    <li key={fav.id}>
+                        {fav.input} - {fav.translation}
+                        <button onClick={() => handleUnfavorite(fav.id)} className="unfavorite-button">
+                            Unfavorite
+                        </button>
+                    </li>
                 ))}
             </ul>
         </div>
