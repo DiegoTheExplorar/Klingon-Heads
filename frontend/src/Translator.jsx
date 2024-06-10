@@ -1,22 +1,27 @@
 import { Client } from "@gradio/client";
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import HistoryPage from './HistoryPage';
-import './Translator.css'; // Import the CSS file
+import './Translator.css';
+import { addFavoriteToFirestore, addHistoryToFirestore } from "./firebasehelper"; // Import function to add favorites and history to Firestore
 
 function Translator() {
   const [input, setInput] = useState('');
   const [translation, setTranslation] = useState('');
-  const [history, setHistory] = useState([]); // State to keep track of history
-  const [favourites, setFavourites] = useState([]); // State to keep track of favourites
   const [translateToKlingon, setTranslateToKlingon] = useState(true); // State to toggle translation direction
-  const [showHistory, setShowHistory] = useState(false); // State to control showing the history
   const navigate = useNavigate();
 
   const handleSignOut = () => {
     // Clear stored user info like email or auth tokens
     localStorage.removeItem('email'); // Assuming email is stored in localStorage
-    navigate('/signin'); // Navigate back to sign-in page
+    navigate('/'); // Navigate back to sign-in page
+  };
+
+  const showFav = () => {
+    navigate('/fav'); // Navigate to favourites
+  };
+
+  const showHistory = () => {
+    navigate('/history'); // Navigate to history
   };
 
   const translateText = async () => {
@@ -31,26 +36,29 @@ function Translator() {
       const data = translateToKlingon ? { english_sentence: input } : { klingon_sentence: input };
       const result = await client.predict(apiEndpoint, data);
       setTranslation(result.data);
-      setHistory(prev => [...prev, { input, translation: result.data }]);
+      addHistoryToFirestore(input, result.data); // Call function to add translation history to Firestore
     } catch (error) {
       console.error('Failed to translate:', error);
       setTranslation('Error: Failed to translate');
     }
   };
 
-  const handleFavourite = () => {
+  const handleFavourite = async () => {
     if (!translation) return;
-    setFavourites(prev => [...prev, { input, translation }]);
+
+    try {
+      await addFavoriteToFirestore(input, translation); // Call function to add favorite to Firestore
+      alert('Added to favourites!');
+    } catch (error) {
+      console.error("Error adding document: ", error);
+      alert('Failed to add to favourites.');
+    }
   };
 
   const toggleTranslationDirection = () => {
     setTranslateToKlingon(!translateToKlingon);
     setInput(translation); // Swap input and translation fields
     setTranslation('');
-  };
-
-  const toggleHistoryVisibility = () => {
-    setShowHistory(!showHistory);
   };
 
   const clearTextAreas = () => {
@@ -98,8 +106,8 @@ function Translator() {
         </button>
         <button 
           className="history-button"
-          onClick={toggleHistoryVisibility}>
-          Toggle History
+          onClick={showHistory}>
+          See your past translations
         </button>
         <button 
           className="clear-button"
@@ -111,8 +119,12 @@ function Translator() {
           onClick={handleSignOut}>
           Sign Out
         </button>
+        <button 
+          className="show-fav"
+          onClick={showFav}>
+          See your favorites
+        </button>
       </div>
-      {showHistory && <HistoryPage history={history} />}
     </div>
   );
 }

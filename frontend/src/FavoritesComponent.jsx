@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { getHistory } from './firebasehelper';
+import { getAllFavorites } from './firebasehelper';
 
-function HistoryPage() {
-    const [history, setHistory] = useState([]);
+function FavoritesComponent() {
+    const [favorites, setFavorites] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        getHistory().then(hist => {
-            setHistory(hist);
+        getAllFavorites().then(favs => {
+            setFavorites(favs);
             setLoading(false);
         }).catch(err => {
             setError(err.message);
@@ -21,14 +21,14 @@ function HistoryPage() {
 
     return (
         <div>
-            <h2>Translation History</h2>
+            <h2>Your Favorites</h2>
             <ul>
-                {history.map((item, index) => (
-                    <li key={index}>{item.input} - {item.translation}</li>
+                {favorites.map(fav => (
+                    <li key={fav.id}>{fav.input} - {fav.translation}</li>
                 ))}
             </ul>
         </div>
     );
 }
 
-export default HistoryPage;
+export default FavoritesComponent;
