@@ -1,5 +1,5 @@
 import { getAuth } from "firebase/auth"; // Import the getAuth function to access Firebase authentication
-import { addDoc, collection, deleteDoc, doc, getDocs, } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, query, where, } from "firebase/firestore";
 import { database } from "./firebaseConfig";
 
 
@@ -121,7 +121,7 @@ export async function checkFavoriteInFirestore(input){
     const querySnapshot = await getDocs(q);
     return !querySnapshot.empty;
 
-  } catch{error}{
+  } catch(error){
     throw error;
   }
 }
