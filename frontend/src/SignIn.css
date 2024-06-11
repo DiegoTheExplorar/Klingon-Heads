@@ -1,0 +1,48 @@
+body {
+    background-color: #f8eddf;
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: black;
+}
+
+.signin-container {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.signin-content {
+    text-align: center;
+}
+
+.logo {
+    height: 175px; /* Adjust the logo size as needed */
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.google-signin-button {
+    background-color: #db4437; /* Google red */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.google-signin-button:hover {
+    background-color: #c33d2e; /* Darker Google red */
+}
