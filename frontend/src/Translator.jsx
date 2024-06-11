@@ -1,13 +1,13 @@
 import { Client } from "@gradio/client";
-import React, { useState } from 'react';
+import accountIcon from '@iconify-icons/mdi/account';
+import heartIcon from '@iconify-icons/mdi/heart';
+import historyIcon from '@iconify-icons/mdi/history';
+import microphoneIcon from '@iconify-icons/mdi/microphone';
+import { Icon } from '@iconify/react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Translator.css';
 import { addFavoriteToFirestore, addHistoryToFirestore } from "./firebasehelper"; // Import function to add favorites and history to Firestore
-import { Icon } from '@iconify/react';
-import historyIcon from '@iconify-icons/mdi/history';
-import heartIcon from '@iconify-icons/mdi/heart';
-import accountIcon from '@iconify-icons/mdi/account';
-import microphoneIcon from '@iconify-icons/mdi/microphone';
 
 function Translator() {
   const [input, setInput] = useState('');
@@ -15,7 +15,34 @@ function Translator() {
   const [translateToKlingon, setTranslateToKlingon] = useState(true); // State to toggle translation direction
   const [isFavourite, setIsFavourite] = useState(false); // State for favourite button
   const [showDropdown, setShowDropdown] = useState(false); // State for user icon dropdown
+  const [isListening, setIsListening] = useState(false);
+  const [speechRecognition, setSpeechRecognition] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if ('webkitSpeechRecognition' in window) {
+      const recognition = new window.webkitSpeechRecognition();
+      recognition.lang = 'en-US';
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+      recognition.onresult = event => {
+        setInput(event.results[0][0].transcript);
+      };
+      setSpeechRecognition(recognition);
+    } else {
+      alert('Speech recognition not available. Please use Chrome to use this feature');
+    }
+  }, []);
+
+  const toggleListening = () => {
+    if (!isListening) {
+      speechRecognition.start();
+    } else {
+      speechRecognition.stop();
+    }
+    setIsListening(!isListening);
+  };
+
 
   const handleSignOut = () => {
     // Clear stored user info like email or auth tokens
@@ -38,12 +65,13 @@ function Translator() {
     }
 
     try {
-      const client = await Client.connect("DiegoTheExplorar/KlingonHeads");
-      const apiEndpoint = translateToKlingon ? "/predict" : "/reverse_predict"; 
+      const ETK = await Client.connect("DiegoTheExplorar/KlingonHeads");
+      const KTE = await Client.connect("DiegoTheExplorar/KlingonToEnglish");
+      const client = translateToKlingon ? ETK : KTE;
       const data = translateToKlingon ? { english_sentence: input } : { klingon_sentence: input };
-      const result = await client.predict(apiEndpoint, data);
+      const result = await client.predict("/predict", data);
       setTranslation(result.data);
-      addHistoryToFirestore(input, result.data); // Call function to add translation history to Firestore
+      addHistoryToFirestore(input, result.data);
     } catch (error) {
       console.error('Failed to translate:', error);
       setTranslation('Error: Failed to translate');
@@ -91,7 +119,7 @@ function Translator() {
       </div>
       <div className="translation-container">
         <div className="english-input-container">
-          <label htmlFor="english">English</label>
+          <label htmlFor="english">{translateToKlingon ? "English" : "Klingon"}</label>
           <textarea
             id="english"
             className="input"
@@ -104,15 +132,15 @@ function Translator() {
               }
             }}
           />
-          <button className="mic-button">
-            <Icon icon={microphoneIcon} className="mic-icon" />
+          <button onClick={toggleListening} className="mic-button">
+            <Icon icon={microphoneIcon} className="mic-icon" style={{ color: isListening ? 'red' : 'black' }} />
           </button>
         </div>
         <button className="swap-button" onClick={toggleTranslationDirection}>
           ↔
         </button>
         <div className="klingon-output-container">
-          <label htmlFor="klingon">Klingon</label>
+          <label htmlFor="klingon">{translateToKlingon ? "Klingon" : "English"}</label>
           <textarea
             id="klingon"
             className="input"
