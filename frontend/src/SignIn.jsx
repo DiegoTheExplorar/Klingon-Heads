@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Translator from './Translator';
 import { auth, provider } from './firebaseConfig';
+import './SignIn.css';
 
 function SignIn() {
     const [email, setEmail] = useState('');
@@ -28,9 +29,13 @@ function SignIn() {
     };
 
     return (
-        <div>
-            {email ? <Translator /> : ( 
-                <button onClick={handleSignIn}>Sign in with Google</button>
+        <div className="signin-container">
+            {email ? <Translator /> : (
+                <div className="signin-content">
+                    <img src="/Klingon-Heads-Logo.png" alt="Klingon Heads Logo" className="logo" />
+                    <h1>Welcome!</h1>
+                    <button onClick={handleSignIn} className="google-signin-button">Sign in with Google</button>
+                </div>
             )}
         </div>
     );
