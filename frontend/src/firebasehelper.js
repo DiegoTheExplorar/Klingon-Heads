@@ -106,3 +106,23 @@ export async function removeFavoriteFromFirestore(id) {
   }
 }
 
+export async function checkFavoriteInFirestore(input){
+  const auth = getAuth();
+  const currentUser = auth.currentUser;
+
+  if (!currentUser) {
+      throw new Error('User not authenticated.');
+  }
+
+  const userFavoritesRef = collection(database, 'users', currentUser.uid, 'favourites');  
+
+  try{
+    const q = query(userFavoritesRef, where("input", "==", input));
+    const querySnapshot = await getDocs(q);
+    return !querySnapshot.empty;
+
+  } catch{error}{
+    throw error;
+  }
+}
+

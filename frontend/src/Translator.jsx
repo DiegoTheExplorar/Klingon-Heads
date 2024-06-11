@@ -4,10 +4,11 @@ import heartIcon from '@iconify-icons/mdi/heart';
 import historyIcon from '@iconify-icons/mdi/history';
 import microphoneIcon from '@iconify-icons/mdi/microphone';
 import { Icon } from '@iconify/react';
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Translator.css';
-import { addFavoriteToFirestore, addHistoryToFirestore } from "./firebasehelper"; // Import function to add favorites and history to Firestore
+import { addFavoriteToFirestore, addHistoryToFirestore, checkFavoriteInFirestore } from "./firebasehelper";
 
 function Translator() {
   const [input, setInput] = useState('');
@@ -17,7 +18,10 @@ function Translator() {
   const [showDropdown, setShowDropdown] = useState(false); // State for user icon dropdown
   const [isListening, setIsListening] = useState(false);
   const [speechRecognition, setSpeechRecognition] = useState(null);
+  const [profilePicUrl, setProfilePicUrl] = useState(null);
   const navigate = useNavigate();
+  const auth = getAuth();
+
 
   useEffect(() => {
     if ('webkitSpeechRecognition' in window) {
@@ -33,6 +37,7 @@ function Translator() {
       alert('Speech recognition not available. Please use Chrome to use this feature');
     }
   }, []);
+  
 
   const toggleListening = () => {
     if (!isListening) {
@@ -43,11 +48,31 @@ function Translator() {
     setIsListening(!isListening);
   };
 
+  
+  useEffect(() => {
+    // onAuthStateChanged returns a method to unsubscribe from the listener when no longer needed
+    const unsubscribe = onAuthStateChanged(auth, user => {
+      if (user) {
+        // User is signed in
+        setProfilePicUrl(user.photoURL);
+      } else {
+        // No user is signed in
+        setProfilePicUrl(null);
+        console.log("No user is signed in.");
+      }
+    });
+  
+  
+    return () => unsubscribe();
+  }, []); 
+  
 
   const handleSignOut = () => {
-    // Clear stored user info like email or auth tokens
-    localStorage.removeItem('email'); // Assuming email is stored in localStorage
-    navigate('/'); // Navigate back to sign-in page
+    signOut(auth).then(() => {
+      navigate('/signin');
+    }).catch((error) => {
+      console.error('Error signing out: ', error);
+    });
   };
 
   const showFav = () => {
@@ -57,6 +82,8 @@ function Translator() {
   const showHistory = () => {
     navigate('/history'); // Navigate to history
   };
+
+
 
   const translateText = async () => {
     if (!input.trim()) {
@@ -77,6 +104,21 @@ function Translator() {
       setTranslation('Error: Failed to translate');
     }
   };
+
+  const FavinDB = async() => {
+    if(!input) return;
+
+    try{
+      const exists = await checkFavoriteInFirestore(input);
+      console.log("FavinDB checked: ", exists);
+      setIsFavourite(exists);
+      return exists;
+    } catch (error){
+      console.error('Error checking favorites:', error);
+      return false;
+    }
+    
+  }
 
   const handleFavourite = async () => {
     if (!translation) return;
@@ -109,7 +151,7 @@ function Translator() {
         <img src="/Klingon-Heads-Logo.png" alt="Klingon Heads Logo" className="logo" />
       </header>
       <div className="user-icon-container" onClick={() => setShowDropdown(!showDropdown)}>
-        <Icon icon={accountIcon} className="user-icon" />
+        {profilePicUrl ? (<img src={profilePicUrl} alt="Profile" className="user-profile-pic" />) : (<Icon icon={accountIcon} className="user-icon" />)}
         {showDropdown && (
           <div className="dropdown-menu">
             <button onClick={handleSignOut}>Sign Out</button>
@@ -129,6 +171,7 @@ function Translator() {
             onKeyPress={(e) => {
               if (e.key === 'Enter') {
                 translateText();
+                FavinDB();
               }
             }}
           />

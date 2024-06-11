@@ -1,47 +1,32 @@
-import { getAuth, onAuthStateChanged } from 'firebase/auth'; // Ensure to import `onAuthStateChanged`
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import FavoritesComponent from './FavoritesComponent';
 import HistoryPage from './HistoryPage';
+import LandingPage from './LandingPage';
 import SignIn from './SignIn';
 import Translator from './Translator';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const auth = getAuth(); // Initialize Firebase Auth
+  const auth = getAuth(); 
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, user => {
       setIsLoggedIn(!!user);
     });
 
-    return () => unsubscribe(); // Cleanup on unmount
+    return () => unsubscribe(); 
   }, [auth]);
-
-  const PrivateRoute = ({ children }) => {
-    return isLoggedIn ? children : <Navigate to="/" />;
-  };
 
   return (
     <Router>
       <Routes>
-        <Route path="/" element={isLoggedIn ? <Navigate to="/translator" /> : <SignIn />} />
-        <Route path="/translator" element={<Translator />} />
-
-        <Route path="/history" element={
-          <PrivateRoute>
-            <HistoryPage />
-          </PrivateRoute>
-        } />
-
-        <Route path="/fav" element={
-          <PrivateRoute>
-            <FavoritesComponent />
-          </PrivateRoute>
-        } />
-
-        {/* Catch-all route */}
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/translator" element={isLoggedIn ? <Translator /> : <Navigate to="/signin" />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/fav" element={isLoggedIn ? <FavoritesComponent /> : <Navigate to="/signin" />} />
+        <Route path="/history" element={isLoggedIn ? <HistoryPage /> : <Navigate to="/signin" />} />
       </Routes>
     </Router>
   );
