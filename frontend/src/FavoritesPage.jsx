@@ -5,6 +5,7 @@ import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import { Icon } from '@iconify/react';
 import accountIcon from '@iconify-icons/mdi/account';
 import arrowBack from '@iconify-icons/mdi/arrow-back';
+import heartBrokenIcon from '@iconify-icons/mdi/heart-broken';
 import './FavoritesPage.css';
 
 function FavoritesPage() {
@@ -125,8 +126,8 @@ function FavoritesPage() {
                             <div className="favorites-item" key={fav.id}>
                                 <div className="favorites-input">{fav.input}</div>
                                 <div className="favorites-output">{fav.translation}</div>
-                                <button onClick={() => handleUnfavorite(fav.id)} className="unfavorite-button">
-                                    Unfavorite
+                                <button className="unfavorite-button" onClick={() => handleUnfavorite(fav.id)}>
+                                    <Icon icon={heartBrokenIcon} className="unfavorite-icon" />
                                 </button>
                             </div>
                         ))}
