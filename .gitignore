@@ -246,3 +246,4 @@ temp/
 
 # Storybook build outputs
 storybook-static/
+node_modules
