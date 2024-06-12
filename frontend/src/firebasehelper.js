@@ -11,13 +11,13 @@ export async function addFavoriteToFirestore(input, translation) {
     throw new Error('User not authenticated.'); // Ensure user is authenticated
   }
 
-  const userFavoritesRef = collection(database, "users", currentUser.uid, "favourites"); // Reference to the user's favorites collection
+  const userFavoritesRef = collection(database, "users", currentUser.uid, "favourites");
 
   try {
     await addDoc(userFavoritesRef, {
       input: input,
       translation: translation,
-      timestamp: new Date() // Add a timestamp to each favorite
+      timestamp: new Date()
     });
   } catch (error) {
     throw new Error(`Failed to add to favourites: ${error.message}`);
