@@ -10,12 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.5.2",
     "@iconify-icons/ic": "^1.2.13",
     "@iconify-icons/mdi": "^1.2.48",
     "@iconify/react": "^5.0.1",
     "firebase": "^10.12.2",
     "langdetect": "^0.2.1",
     "react": "^18.2.0",
+    "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.23.1"
   },
