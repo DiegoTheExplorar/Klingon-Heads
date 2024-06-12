@@ -9,7 +9,7 @@ import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Translator.css';
-import { addFavoriteToFirestore, addHistoryToFirestore, checkFavoriteInFirestore } from "./firebasehelper";
+import { addFavoriteToFirestore, addHistoryToFirestore, checkFavoriteInFirestore, removeFavoriteBasedOnInput } from "./firebasehelper";
 
 function Translator() {
   const [input, setInput] = useState('');
@@ -51,7 +51,6 @@ function Translator() {
 
   
   useEffect(() => {
-    // onAuthStateChanged returns a method to unsubscribe from the listener when no longer needed
     const unsubscribe = onAuthStateChanged(auth, user => {
       if (user) {
         // User is signed in
@@ -100,6 +99,7 @@ function Translator() {
       const result = await client.predict("/predict", data);
       setTranslation(result.data);
       addHistoryToFirestore(input, result.data);
+      FavinDB();
     } catch (error) {
       console.error('Failed to translate:', error);
       setTranslation('Error: Failed to translate');
@@ -131,6 +131,19 @@ function Translator() {
     } catch (error) {
       console.error("Error adding document: ", error);
       alert('Failed to add to favourites.');
+    }
+  };
+
+  const removeFavourite = async () => {
+    if (!translation) return;
+
+    try {
+      await removeFavoriteBasedOnInput(input); 
+      setIsFavourite(false);
+      alert('Removed from favourites!');
+    } catch (error) {
+      console.error("Error removing document: ", error);
+      alert('Failed to remove to favourites.');
     }
   };
 
@@ -172,7 +185,6 @@ function Translator() {
             onKeyPress={(e) => {
               if (e.key === 'Enter') {
                 translateText();
-                FavinDB();
               }
             }}
           />
@@ -194,7 +206,7 @@ function Translator() {
             value={translation}
             readOnly
           />
-          <button className="fav-button" onClick={handleFavourite}>
+          <button className="fav-button" onClick={isFavourite ?removeFavourite: handleFavourite}>
             <Icon icon={heartIcon} className="fav-icon" style={{ color: isFavourite ? 'red' : 'black' }}/>
           </button>
         </div>
