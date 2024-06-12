@@ -3,7 +3,7 @@ import { addDoc, collection, deleteDoc, doc, getDocs, query, where } from "fireb
 import { database } from "./firebaseConfig";
 
 
-export async function addFavoriteToFirestore(input, translation) {
+export async function addFavoriteToFirestore(input, translation,language) {
   const auth = getAuth(); 
   const currentUser = auth.currentUser; 
 
@@ -17,6 +17,7 @@ export async function addFavoriteToFirestore(input, translation) {
     await addDoc(userFavoritesRef, {
       input: input.trim(),
       translation: translation,
+      language:language,
       timestamp: new Date()
     });
   } catch (error) {
@@ -24,7 +25,7 @@ export async function addFavoriteToFirestore(input, translation) {
   }
 }
 
-export async function addHistoryToFirestore(input, translation) {
+export async function addHistoryToFirestore(input, translation,language) {
   const auth = getAuth(); 
   const currentUser = auth.currentUser; 
 
@@ -38,6 +39,7 @@ export async function addHistoryToFirestore(input, translation) {
     await addDoc(userFavoritesRef, {
       input: input,
       translation: translation,
+      language:language,
       timestamp: new Date() 
     });
   } catch (error) {
