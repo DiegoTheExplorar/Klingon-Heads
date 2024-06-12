@@ -5,6 +5,8 @@ import copyIcon from '@iconify-icons/mdi/content-copy';
 import heartIcon from '@iconify-icons/mdi/heart';
 import historyIcon from '@iconify-icons/mdi/history';
 import microphoneIcon from '@iconify-icons/mdi/microphone';
+import swapIcon from '@iconify-icons/mdi/swap-horizontal-bold';
+import translateIcon from '@iconify-icons/mdi/arrow-forward';
 import { Icon } from '@iconify/react';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
@@ -16,6 +18,7 @@ import { addFavoriteToFirestore, addHistoryToFirestore, checkFavoriteInFirestore
 function Translator() {
   const [input, setInput] = useState('');
   const [translation, setTranslation] = useState('');
+  const [translating, setTranslating] = useState(false);
   const [translateToKlingon, setTranslateToKlingon] = useState(true); // State to toggle translation direction
   const [isFavourite, setIsFavourite] = useState(false); // State for favourite button
   const [showDropdown, setShowDropdown] = useState(false); // State for user icon dropdown
@@ -85,8 +88,6 @@ function Translator() {
     navigate('/history'); // Navigate to history
   };
 
-
-
   const translateText = async () => {
     if (!input.trim()) {
       alert(`Please enter some ${translateToKlingon ? "English" : "Klingon"} text.`);
@@ -94,6 +95,7 @@ function Translator() {
     }
 
     try {
+      setTranslating(true);
       const ETK = await Client.connect("DiegoTheExplorar/KlingonHeads");
       const KTE = await Client.connect("DiegoTheExplorar/KlingonToEnglish");
       const client = translateToKlingon ? ETK : KTE;
@@ -105,6 +107,8 @@ function Translator() {
     } catch (error) {
       console.error('Failed to translate:', error);
       setTranslation('Error: Failed to translate');
+    } finally {
+      setTranslating(false);
     }
   };
 
@@ -196,16 +200,22 @@ function Translator() {
           <button onClick={clearTextAreas} className="clear-button">
             <Icon icon={closeIcon} className="clear-button" />
           </button>
-        </div>
-        <button className="swap-button" onClick={toggleTranslationDirection}>
-          ↔
-        </button>
+          </div>
+        {input.trim() ? (
+          <button className="translate-button" onClick={translateText}>
+            <Icon icon={translateIcon} />
+          </button>
+        ) : (
+          <button className="swap-button" onClick={toggleTranslationDirection}>
+            <Icon icon={swapIcon} />
+          </button>
+        )}
         <div className="klingon-output-container">
           <label htmlFor="klingon">{translateToKlingon ? "Klingon" : "English"}</label>
           <textarea
             id="klingon"
             className="input"
-            value={translation}
+            value={translating ? "Translating..." : translation}
             readOnly
           />
           <button className="fav-button" onClick={isFavourite ?removeFavourite: handleFavourite}>
