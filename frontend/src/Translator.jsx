@@ -1,12 +1,14 @@
 import { Client } from "@gradio/client";
 import closeIcon from '@iconify-icons/ic/twotone-close';
 import accountIcon from '@iconify-icons/mdi/account';
+import copyIcon from '@iconify-icons/mdi/content-copy';
 import heartIcon from '@iconify-icons/mdi/heart';
 import historyIcon from '@iconify-icons/mdi/history';
 import microphoneIcon from '@iconify-icons/mdi/microphone';
 import { Icon } from '@iconify/react';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useNavigate } from 'react-router-dom';
 import './Translator.css';
 import { addFavoriteToFirestore, addHistoryToFirestore, checkFavoriteInFirestore, removeFavoriteBasedOnInput } from "./firebasehelper";
@@ -69,7 +71,7 @@ function Translator() {
 
   const handleSignOut = () => {
     signOut(auth).then(() => {
-      navigate('/signin');
+      navigate('/');
     }).catch((error) => {
       console.error('Error signing out: ', error);
     });
@@ -209,6 +211,9 @@ function Translator() {
           <button className="fav-button" onClick={isFavourite ?removeFavourite: handleFavourite}>
             <Icon icon={heartIcon} className="fav-icon" style={{ color: isFavourite ? 'red' : 'black' }}/>
           </button>
+          <CopyToClipboard text={translation} onCopy={() => alert('Copied!')}>
+              <Icon icon={copyIcon} className="copy-button" />
+          </CopyToClipboard>
         </div>
       </div>
       <div className="footer">

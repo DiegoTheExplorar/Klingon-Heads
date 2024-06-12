@@ -143,6 +143,15 @@ header {
   right: 10px;
 }
 
+.copy-button{
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  bottom: 180px;
+  right: 10px;
+}
+
 .fav-icon {
   width: 24px;
   height: 24px;

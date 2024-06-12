@@ -1,7 +1,21 @@
-import React from 'react';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const LandingPage = ({ isLoggedIn }) => {
+const LandingPage = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const auth = getAuth(); 
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, user => {
+      setIsLoggedIn(!!user);
+      if(isLoggedIn) console.log('Logged in');
+      else console.log('Not Logged in');
+    });
+
+    return () => unsubscribe();
+  }, []);  
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-800 text-white">
       <h1 className="text-4xl font-bold">Welcome to Klingon to English Translator</h1>
