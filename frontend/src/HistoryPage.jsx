@@ -56,14 +56,15 @@ function HistoryPage() {
 
     const filteredHistory = history.filter(item => {
         if (filter === 'all') return true;
-        if (filter === 'englishToKlingon') return item.direction === 'englishToKlingon';
-        if (filter === 'klingonToEnglish') return item.direction === 'klingonToEnglish';
+        if (filter === 'englishToKlingon') return item.language === 'English';
+        if (filter === 'klingonToEnglish') return item.language === 'Klingon';
+
         return false;
     });
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
-    
+
     return (
         <div className="history-page">
             <button className="back-button" onClick={() => navigate('/translator')}>
