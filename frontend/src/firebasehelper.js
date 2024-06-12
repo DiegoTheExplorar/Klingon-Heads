@@ -1,21 +1,21 @@
-import { getAuth } from "firebase/auth"; // Import the getAuth function to access Firebase authentication
-import { addDoc, collection, deleteDoc, doc, getDocs, query, where, } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+import { addDoc, collection, deleteDoc, doc, getDocs, query, where } from "firebase/firestore";
 import { database } from "./firebaseConfig";
 
 
 export async function addFavoriteToFirestore(input, translation) {
-  const auth = getAuth(); // Get the auth object
-  const currentUser = auth.currentUser; // Get the current authenticated user
+  const auth = getAuth(); 
+  const currentUser = auth.currentUser; 
 
   if (!currentUser) {
-    throw new Error('User not authenticated.'); // Ensure user is authenticated
+    throw new Error('User not authenticated.'); 
   }
 
   const userFavoritesRef = collection(database, "users", currentUser.uid, "favourites");
 
   try {
     await addDoc(userFavoritesRef, {
-      input: input,
+      input: input.trim(),
       translation: translation,
       timestamp: new Date()
     });
@@ -25,20 +25,20 @@ export async function addFavoriteToFirestore(input, translation) {
 }
 
 export async function addHistoryToFirestore(input, translation) {
-  const auth = getAuth(); // Get the auth object
-  const currentUser = auth.currentUser; // Get the current authenticated user
+  const auth = getAuth(); 
+  const currentUser = auth.currentUser; 
 
   if (!currentUser) {
-    throw new Error('User not authenticated.'); // Ensure user is authenticated
+    throw new Error('User not authenticated.'); 
   }
 
-  const userFavoritesRef = collection(database, "users", currentUser.uid, "history"); // Reference to the user's history collection
+  const userFavoritesRef = collection(database, "users", currentUser.uid, "history"); 
 
   try {
     await addDoc(userFavoritesRef, {
       input: input,
       translation: translation,
-      timestamp: new Date() // Add a timestamp to each translation
+      timestamp: new Date() 
     });
   } catch (error) {
     throw new Error(`Failed to add to History: ${error.message}`);
@@ -59,8 +59,8 @@ export async function getAllFavorites() {
     try {
         const snapshot = await getDocs(userFavoritesRef);
         return snapshot.docs.map(doc => ({
-            id: doc.id, // include document ID if needed for reference or deletion
-            ...doc.data() // spread the data in the document
+            id: doc.id, 
+            ...doc.data() 
         }));
     } catch (error) {
         throw new Error(`Failed to retrieve favorites: ${error.message}`);
@@ -106,29 +106,57 @@ export async function removeFavoriteFromFirestore(id) {
   }
 }
 
-export async function checkFavoriteInFirestore(input){
-  console.log("Checking for favorite:", input);
+
+export async function checkFavoriteInFirestore(input) {
+    const auth = getAuth();
+    const currentUser = auth.currentUser;
+
+    if (!currentUser) {
+        throw new Error('User not authenticated.');
+    }
+
+    const userFavoritesRef = collection(database, 'users', currentUser.uid, 'favourites');
+    
+    const q = query(userFavoritesRef, where("input", "==", input.trim()));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+        console.log('No matching documents.');
+        return false;
+    } else {
+        console.log('Document found:', querySnapshot.docs.map(doc => doc.data()));
+        return true; 
+    }
+}
+
+export async function removeFavoriteBasedOnInput(input) {
   const auth = getAuth();
   const currentUser = auth.currentUser;
 
   if (!currentUser) {
       throw new Error('User not authenticated.');
   }
-
-  console.log("Authenticated user ID:", currentUser.uid);
   const userFavoritesRef = collection(database, 'users', currentUser.uid, 'favourites');
+  const q = query(userFavoritesRef, where("input", "==", input.trim()));
 
   try {
-    const q = query(userFavoritesRef, where("input", "==", input));
-    const querySnapshot = await getDocs(q);
-    console.log("Query Snapshot:", querySnapshot);
-    console.log("Is snapshot empty:", querySnapshot.empty);
-    return !querySnapshot.empty;
+      const querySnapshot = await getDocs(q);
+      if (querySnapshot.empty) {
+          console.log('No matching documents.');
+          return false;
+      }
 
-  } catch(error) {
-    console.error("Error fetching favorites:", error);
-    throw error;
+      querySnapshot.forEach(async (docSnapshot) => {
+          await deleteDoc(doc(userFavoritesRef, docSnapshot.id));
+          console.log(`Deleted document with ID: ${docSnapshot.id}`);
+      });
+
+      return true;
+  } catch (error) {
+      console.error("Error removing document: ", error);
+      throw error;
   }
 }
+
 
 
