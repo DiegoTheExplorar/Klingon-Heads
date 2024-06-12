@@ -100,7 +100,7 @@ function Translator() {
       const data = translateToKlingon ? { english_sentence: input } : { klingon_sentence: input };
       const result = await client.predict("/predict", data);
       setTranslation(result.data);
-      addHistoryToFirestore(input, result.data);
+      addHistoryToFirestore(input, result.data,translateToKlingon ? "English" : "Klingon");
       FavinDB();
     } catch (error) {
       console.error('Failed to translate:', error);
@@ -127,7 +127,7 @@ function Translator() {
     if (!translation) return;
 
     try {
-      await addFavoriteToFirestore(input, translation); 
+      await addFavoriteToFirestore(input, translation,translateToKlingon ? "English" : "Klingon"); 
       setIsFavourite(true);
       alert('Added to favourites!');
     } catch (error) {
