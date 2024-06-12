@@ -1,4 +1,5 @@
 import { Client } from "@gradio/client";
+import closeIcon from '@iconify-icons/ic/twotone-close';
 import accountIcon from '@iconify-icons/mdi/account';
 import heartIcon from '@iconify-icons/mdi/heart';
 import historyIcon from '@iconify-icons/mdi/history';
@@ -177,6 +178,9 @@ function Translator() {
           />
           <button onClick={toggleListening} className="mic-button">
             <Icon icon={microphoneIcon} className="mic-icon" style={{ color: isListening ? 'red' : 'black' }} />
+          </button>
+          <button onClick={clearTextAreas} className="clear-button">
+            <Icon icon={closeIcon} className="clear-button" />
           </button>
         </div>
         <button className="swap-button" onClick={toggleTranslationDirection}>
