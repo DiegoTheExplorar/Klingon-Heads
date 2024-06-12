@@ -125,8 +125,8 @@ function Translator() {
     if (!translation) return;
 
     try {
-      await addFavoriteToFirestore(input, translation); // Call function to add favorite to Firestore
-      setIsFavorite(true);
+      await addFavoriteToFirestore(input, translation); 
+      setIsFavourite(true);
       alert('Added to favourites!');
     } catch (error) {
       console.error("Error adding document: ", error);
@@ -195,7 +195,7 @@ function Translator() {
             readOnly
           />
           <button className="fav-button" onClick={handleFavourite}>
-            <Icon icon={isFavourite ? heartFilledIcon : heartIcon} className="fav-icon" />
+            <Icon icon={heartIcon} className="fav-icon" style={{ color: isFavourite ? 'red' : 'black' }}/>
           </button>
         </div>
       </div>
