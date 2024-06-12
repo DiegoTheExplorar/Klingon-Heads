@@ -80,8 +80,8 @@ export async function getHistory() {
   try {
       const snapshot = await getDocs(userFavoritesRef);
       return snapshot.docs.map(doc => ({
-          id: doc.id, // include document ID if needed for reference or deletion
-          ...doc.data() // spread the data in the document
+          id: doc.id, 
+          ...doc.data() 
       }));
   } catch (error) {
       throw new Error(`Failed to retrieve history: ${error.message}`);
@@ -107,6 +107,7 @@ export async function removeFavoriteFromFirestore(id) {
 }
 
 export async function checkFavoriteInFirestore(input){
+  console.log("Checking for favorite:", input);
   const auth = getAuth();
   const currentUser = auth.currentUser;
 
@@ -114,15 +115,20 @@ export async function checkFavoriteInFirestore(input){
       throw new Error('User not authenticated.');
   }
 
-  const userFavoritesRef = collection(database, 'users', currentUser.uid, 'favourites');  
+  console.log("Authenticated user ID:", currentUser.uid);
+  const userFavoritesRef = collection(database, 'users', currentUser.uid, 'favourites');
 
-  try{
+  try {
     const q = query(userFavoritesRef, where("input", "==", input));
     const querySnapshot = await getDocs(q);
+    console.log("Query Snapshot:", querySnapshot);
+    console.log("Is snapshot empty:", querySnapshot.empty);
     return !querySnapshot.empty;
 
-  } catch(error){
+  } catch(error) {
+    console.error("Error fetching favorites:", error);
     throw error;
   }
 }
+
 

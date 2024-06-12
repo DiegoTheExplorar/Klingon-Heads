@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@iconify-icons/ic": "^1.2.13",
     "@iconify-icons/mdi": "^1.2.48",
     "@iconify/react": "^5.0.1",
     "firebase": "^10.12.2",
