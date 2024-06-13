@@ -133,7 +133,7 @@ function Translator() {
     try {
       await addFavoriteToFirestore(input, translation,translateToKlingon ? "English" : "Klingon"); 
       setIsFavourite(true);
-      alert('Added to favourites!');
+      //alert('Added to favourites!');
     } catch (error) {
       console.error("Error adding document: ", error);
       alert('Failed to add to favourites.');
@@ -146,7 +146,7 @@ function Translator() {
     try {
       await removeFavoriteBasedOnInput(input); 
       setIsFavourite(false);
-      alert('Removed from favourites!');
+      //alert('Removed from favourites!');
     } catch (error) {
       console.error("Error removing document: ", error);
       alert('Failed to remove to favourites.');

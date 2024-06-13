@@ -47,6 +47,23 @@ export async function addHistoryToFirestore(input, translation,language) {
   }
 }
 
+export async function removeHistoryFromFirestore(id) {
+  const auth = getAuth();
+  const currentUser = auth.currentUser;
+
+  if (!currentUser) {
+      throw new Error('User not authenticated.');
+  }
+
+  const userHistoryRef = collection(database, 'users', currentUser.uid, 'history');
+  const historyDocRef = doc(userHistoryRef, id);
+
+  try {
+      await deleteDoc(historyDocRef);
+  } catch (error) {
+      throw new Error(`Failed to remove history item: ${error.message}`);
+  }
+}
 
 export async function getAllFavorites() {
     const auth = getAuth();

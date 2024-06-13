@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './HistoryPage.css'; // Import the CSS file for styling
-import { getHistory } from './firebasehelper';
+import { getHistory, removeHistoryFromFirestore } from './firebasehelper';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import { Icon } from '@iconify/react';
 import arrowBack from '@iconify-icons/mdi/arrow-back';
 import accountIcon from '@iconify-icons/mdi/account';
+import removeIcon from '@iconify-icons/ic/twotone-close';
 
 function HistoryPage() {
     const [history, setHistory] = useState([]);
@@ -62,6 +63,15 @@ function HistoryPage() {
         return false;
     });
 
+    const handleRemoveHistory = async (id) => {
+        try {
+            await removeHistoryFromFirestore(id);
+            setHistory(prevHistory => prevHistory.filter(item => item.id !== id));
+        } catch (error) {
+            setError(error.message);
+        }
+    };
+
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
 
@@ -117,6 +127,9 @@ function HistoryPage() {
                             <div className="history-item" key={index}>
                                 <div className="history-input">{item.input}</div>
                                 <div className="history-output">{item.translation}</div>
+                                <button onClick={() => handleRemoveHistory(item.id)} className="remove-button">
+                                    <Icon icon={removeIcon} className="remove-icon" />
+                                </button>
                             </div>
                         ))}
                     </div>

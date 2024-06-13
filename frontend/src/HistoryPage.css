@@ -88,6 +88,17 @@ body {
     color: red;
 }
 
+.remove-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.remove-icon {
+    font-size: 1.5em;
+    color: black;
+}
+
 .back-button {
     position: fixed;
     left: 10px; /* Adjusted to make it fully visible */
