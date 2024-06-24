@@ -1,12 +1,12 @@
 import { Client } from "@gradio/client";
 import closeIcon from '@iconify-icons/ic/twotone-close';
 import accountIcon from '@iconify-icons/mdi/account';
+import translateIcon from '@iconify-icons/mdi/arrow-forward';
 import copyIcon from '@iconify-icons/mdi/content-copy';
 import heartIcon from '@iconify-icons/mdi/heart';
 import historyIcon from '@iconify-icons/mdi/history';
 import microphoneIcon from '@iconify-icons/mdi/microphone';
 import swapIcon from '@iconify-icons/mdi/swap-horizontal-bold';
-import translateIcon from '@iconify-icons/mdi/arrow-forward';
 import { Icon } from '@iconify/react';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
@@ -97,7 +97,7 @@ function Translator() {
     try {
       setTranslating(true);
       const ETK = await Client.connect("DiegoTheExplorar/KlingonHeads");
-      const KTE = await Client.connect("DiegoTheExplorar/KlingonToEnglish");
+      const KTE = await Client.connect("DiegoTheExplorar/KlingonHeads_Klingon_To_English");
       const client = translateToKlingon ? ETK : KTE;
       const data = translateToKlingon ? { english_sentence: input } : { klingon_sentence: input };
       const result = await client.predict("/predict", data);
