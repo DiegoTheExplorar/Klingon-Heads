@@ -1,0 +1,49 @@
+html, body {
+    height: 100%;
+    margin: 0; 
+    padding: 0; 
+  }
+  
+  .landing {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100vw; 
+    height: 100vh; 
+    background: black url('/star-trek-dmt1ov7n2g6fwp25.jpg') center center / cover no-repeat;
+    color: white; 
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .title {
+    font-size: 3rem;
+    color: #f8d21c;
+    text-shadow: 2px 2px 4px #000; 
+  }
+  
+  .subtitle {
+    font-size: 1.8rem;
+    margin-top: 1rem;
+    color: #ffffff;
+    text-shadow: 1px 1px 3px #000; 
+  }
+  
+  .button {
+    margin-top: 2rem;
+    background-color: #0033cc; 
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1.5rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+  }
+  
+  .button:hover {
+    background-color: #001a66; 
+    transform: scale(1.1); 
+  }
+  
