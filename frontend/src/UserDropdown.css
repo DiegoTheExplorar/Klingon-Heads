@@ -1,0 +1,49 @@
+.user-icon-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+  }
+  
+  .user-profile-pic {
+    width: 24px; /* Adjust the width to your preference */
+    height: 24px; /* Adjust the height to your preference */
+    border-radius: 50%; /* Ensures the image is circular */
+  }
+  
+  
+  .user-icon {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .dropdown-menu {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    width: 100px;
+  }
+  
+  .dropdown-menu button {
+    background: none;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+  }
+  .dropdown-menu button:hover, .dropdown-menu button:focus {
+    background-color: #f0f0f0; /* Light grey background on hover/focus */
+    outline: none; /* Removes the outline */
+  }
+  
+  .dropdown-menu button:focus {
+    box-shadow: 0 0 0 2px #0056b3; /* Adds a blue box shadow for focus */
+  }

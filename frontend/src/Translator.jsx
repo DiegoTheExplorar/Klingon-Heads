@@ -1,6 +1,5 @@
 import { Client } from "@gradio/client";
 import closeIcon from '@iconify-icons/ic/twotone-close';
-import accountIcon from '@iconify-icons/mdi/account';
 import translateIcon from '@iconify-icons/mdi/arrow-forward';
 import copyIcon from '@iconify-icons/mdi/content-copy';
 import heartIcon from '@iconify-icons/mdi/heart';
@@ -8,13 +7,14 @@ import historyIcon from '@iconify-icons/mdi/history';
 import microphoneIcon from '@iconify-icons/mdi/microphone';
 import swapIcon from '@iconify-icons/mdi/swap-horizontal-bold';
 import { Icon } from '@iconify/react';
-import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useNavigate } from 'react-router-dom';
-import './Translator.css';
 import { addFavoriteToFirestore, addHistoryToFirestore, checkFavoriteInFirestore, removeFavoriteBasedOnInput } from "./firebasehelper";
-
+import './Translator.css';
+import UserDropdown from './UserDropdown';
+import './UserDropdown.css';
 function Translator() {
   const [input, setInput] = useState('');
   const [translation, setTranslation] = useState('');
@@ -72,13 +72,6 @@ function Translator() {
   }, []); 
   
 
-  const handleSignOut = () => {
-    signOut(auth).then(() => {
-      navigate('/');
-    }).catch((error) => {
-      console.error('Error signing out: ', error);
-    });
-  };
 
   const showFav = () => {
     navigate('/fav'); // Navigate to favourites
@@ -171,13 +164,12 @@ function Translator() {
         <img src="/Klingon-Heads-Logo.png" alt="Klingon Heads Logo" className="logo" />
       </header>
       <div className="user-icon-container" onClick={() => setShowDropdown(!showDropdown)}>
-        {profilePicUrl ? (<img src={profilePicUrl} alt="Profile" className="user-profile-pic" />) : (<Icon icon={accountIcon} className="user-icon" />)}
-        {showDropdown && (
-          <div className="dropdown-menu">
-            <button onClick={handleSignOut}>Sign Out</button>
-            <button onClick={() => navigate('/profile')}>Profile</button>
-          </div>
-        )}
+                {profilePicUrl ? (
+                    <img src={profilePicUrl} alt="User Icon" className="user-profile-pic" />
+                ) : (
+                    <div className="user-icon" />
+                )}
+                {showDropdown && <UserDropdown auth={auth} profilePicUrl={profilePicUrl} />}
       </div>
       <div className="translation-container">
         <div className="english-input-container">
