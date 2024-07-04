@@ -1,13 +1,13 @@
+import removeIcon from '@iconify-icons/ic/twotone-close';
+import arrowBack from '@iconify-icons/mdi/arrow-back';
+import { Icon } from '@iconify/react';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAllFavorites, removeFavoriteFromFirestore } from './firebasehelper';
-import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
-import { Icon } from '@iconify/react';
-import accountIcon from '@iconify-icons/mdi/account';
-import arrowBack from '@iconify-icons/mdi/arrow-back';
-import removeIcon from '@iconify-icons/ic/twotone-close';
 import './FavoritesPage.css';
-
+import { getAllFavorites, removeFavoriteFromFirestore } from './firebasehelper';
+import UserDropdown from './UserDropdown';
+import './UserDropdown.css';
 function FavoritesPage() {
     const [favorites, setFavorites] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -43,13 +43,6 @@ function FavoritesPage() {
         return () => unsubscribe();
     }, []);
 
-    const handleSignOut = () => {
-        signOut(auth).then(() => {
-            navigate('/signin');
-        }).catch((error) => {
-            console.error('Error signing out: ', error);
-        });
-    };
 
     const handleFilterChange = (newFilter) => {
         setFilter(newFilter);
@@ -82,16 +75,11 @@ function FavoritesPage() {
             </button>
             <div className="user-icon-container" onClick={() => setShowDropdown(!showDropdown)}>
                 {profilePicUrl ? (
-                    <img src={profilePicUrl} alt="Profile" className="user-profile-pic" />
+                    <img src={profilePicUrl} alt="User Icon" className="user-profile-pic" />
                 ) : (
-                    <Icon icon={accountIcon} className="user-icon" />
+                    <div className="user-icon" />
                 )}
-                {showDropdown && (
-                    <div className="dropdown-menu">
-                        <button onClick={handleSignOut}>Sign Out</button>
-                        <button onClick={() => navigate('/profile')}>Profile</button>
-                    </div>
-                )}
+                {showDropdown && <UserDropdown auth={auth} profilePicUrl={profilePicUrl} />}
             </div>
             <img src="/Klingon-Heads-Logo.png" alt="Klingon Heads Logo" className="logo" />
             <h2 className="favorites-header">Favorites</h2>

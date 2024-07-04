@@ -19,6 +19,7 @@ function UserDropdown({ auth}) {
             <button onClick={handleSignOut}>Sign Out</button>
             <button onClick={() => navigate('/translator')}>Translator</button>
             <button onClick={() => navigate('/learn')}>Learn</button>
+            <button onClick={() => navigate('/quiz')}>Quiz</button>
         </div>
     );
 }
