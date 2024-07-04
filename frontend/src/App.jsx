@@ -4,7 +4,7 @@ import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-d
 import FavoritesPage from './FavoritesPage';
 import HistoryPage from './HistoryPage';
 import LandingPage from './LandingPage';
-import FetchDataComponent from './Quiz/FetchData';
+import FetchDataComponent from './Learn/ShowCards';
 import SignIn from './SignIn';
 import Translator from './Translator';
 

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import UserDropdown from '../UserDropdown';
 import '../UserDropdown.css';
@@ -37,13 +37,6 @@ function FetchDataComponent() {
         }
     };
 
-    const handleSignOut = () => {
-        signOut(auth).then(() => {
-            navigate('/'); // Redirect to homepage or login page after sign out
-        }).catch((error) => {
-            console.error('Error signing out: ', error);
-        });
-    };
 
     return (
         <div>
