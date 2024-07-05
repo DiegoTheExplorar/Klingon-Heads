@@ -42,7 +42,6 @@ function FetchDataComponent() {
         <div>
             <div style={{ padding: '20px', textAlign: 'center' }}>
                 {!hasFetched ? (
-                    // Show the initial card that fetches the first flashcard
                     <InitialCard fetchFlashcard={fetchFlashcard} />
                 ) : (
                     <>

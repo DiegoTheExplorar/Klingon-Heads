@@ -5,7 +5,7 @@ import FavoritesPage from './FavoritesPage';
 import HistoryPage from './HistoryPage';
 import LandingPage from './LandingPage';
 import FetchDataComponent from './Learn/ShowCards';
-import MatchingQuiz from './Quiz/MatchingQuiz';
+import QuizComponent from './Quiz/QuizComponent';
 import SignIn from './SignIn';
 import Translator from './Translator';
 
@@ -37,7 +37,7 @@ const App = () => {
         <Route path="/fav" element={isLoggedIn ? <FavoritesPage /> : <Navigate to="/signin" />} />
         <Route path="/history" element={isLoggedIn ? <HistoryPage /> : <Navigate to="/signin" />} />
         <Route path="/learn" element={<FetchDataComponent />} />
-        <Route path="/quiz" element={<MatchingQuiz quizData={quizData}/>} />
+        <Route path="/quiz" element={<QuizComponent/>} />
       </Routes>
     </Router>
   );
