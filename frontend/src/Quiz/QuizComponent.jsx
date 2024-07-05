@@ -34,7 +34,7 @@ function QuizComponent() {
 
   const fetchQuestions = async () => {
     try {
-      const response = await fetch('http://localhost:5000/quiz');
+      const response = await fetch('https://klingonapi-cafaedb94044.herokuapp.com/quiz');
       const data = await response.json();
       setQuestions(data);
     } catch (error) {
@@ -74,7 +74,6 @@ function QuizComponent() {
       ) : !finished ? (
         <div className="quiz-container">
           <div className="progress-bar">
-            {/* Updated to reflect submissions instead of current question index */}
             <div className="progress" style={{ width: `${(submittedCount / questions.length) * 100}%` }}></div>
           </div>
           <div className="score-tracker">

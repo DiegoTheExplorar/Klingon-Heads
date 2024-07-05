@@ -27,7 +27,7 @@ function FetchDataComponent() {
 
     const fetchFlashcard = async () => {
         try {
-            const response = await axios.get('http://127.0.0.1:5000/flashcard');
+            const response = await axios.get('https://klingonapi-cafaedb94044.herokuapp.com/flashcard');
             setFlashcard(response.data);
             setError('');
             setHasFetched(true);

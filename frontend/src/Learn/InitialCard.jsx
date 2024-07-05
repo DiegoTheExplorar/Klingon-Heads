@@ -29,7 +29,7 @@ function InitialCard({ flashcard, fetchFlashcard }) {
         return (
             <div onClick={handleCardClick} className="card">
                 <div className="card-front">
-                    <img src="public/Klingon-Heads-Logo.png" alt="Klingon Heads Logo" style={{ width: '40%', height: '50%' }} />
+                    <img src="/Klingon-Heads-Logo.png" alt="Klingon Heads Logo" style={{ width: '40%', height: '50%' }} />
                 </div>
             </div>
         );
