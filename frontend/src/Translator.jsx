@@ -11,10 +11,10 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useNavigate } from 'react-router-dom';
-import { addFavoriteToFirestore, addHistoryToFirestore, checkFavoriteInFirestore, removeFavoriteBasedOnInput } from "./firebasehelper";
+import { addFavoriteToFirestore, addHistoryToFirestore, checkFavoriteInFirestore, removeFavoriteBasedOnInput } from './FireBase/firebasehelper';
 import './Translator.css';
 import UserDropdown from './UserDropdown';
-import './UserDropdown.css';
+
 function Translator() {
   const [input, setInput] = useState('');
   const [translation, setTranslation] = useState('');
@@ -176,6 +176,7 @@ function Translator() {
           <label htmlFor="english">{translateToKlingon ? "English" : "Klingon"}</label>
           <textarea
             id="english"
+            data-gramm="false"
             className="input"
             value={input}
             onChange={(e) => setInput(e.target.value)}

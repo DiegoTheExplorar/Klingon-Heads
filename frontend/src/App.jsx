@@ -1,8 +1,8 @@
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import FavoritesPage from './FavoritesPage';
-import HistoryPage from './HistoryPage';
+import FavoritesPage from './History_and_Favs/FavoritesPage';
+import HistoryPage from './History_and_Favs/HistoryPage';
 import LandingPage from './LandingPage';
 import FetchDataComponent from './Learn/ShowCards';
 import QuizComponent from './Quiz/QuizComponent';

@@ -4,10 +4,10 @@ import { Icon } from '@iconify/react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getHistory, removeHistoryFromFirestore } from './firebasehelper';
-import './HistoryPage.css'; // Import the CSS file for styling
-import UserDropdown from './UserDropdown';
-import './UserDropdown.css';
+import { getHistory, removeHistoryFromFirestore } from '../FireBase/firebasehelper';
+import UserDropdown from '../UserDropdown';
+import './HistoryPage.css';
+
 function HistoryPage() {
     const [history, setHistory] = useState([]);
     const [loading, setLoading] = useState(true);

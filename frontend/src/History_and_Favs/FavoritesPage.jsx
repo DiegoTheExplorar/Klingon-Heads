@@ -4,10 +4,10 @@ import { Icon } from '@iconify/react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getAllFavorites, removeFavoriteFromFirestore } from '../FireBase/firebasehelper';
+import UserDropdown from '../UserDropdown';
 import './FavoritesPage.css';
-import { getAllFavorites, removeFavoriteFromFirestore } from './firebasehelper';
-import UserDropdown from './UserDropdown';
-import './UserDropdown.css';
+
 function FavoritesPage() {
     const [favorites, setFavorites] = useState([]);
     const [loading, setLoading] = useState(true);

@@ -16,7 +16,7 @@ function QuizComponent() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [profilePicUrl, setProfilePicUrl] = useState(null);
   const auth = getAuth();
-
+  const [Wrong, setWrong] = useState([]);
   useEffect(() => {
     fetchQuestions();
   }, []);
@@ -42,7 +42,19 @@ function QuizComponent() {
     }
   };
 
+  const displayWrongAnswers = (wrongArray) => {
+    console.log("Incorrect Answers:");
+    wrongArray.forEach(question => {
+      console.log(question);
+    });
+  };
+
   const handleAnswerSubmit = isCorrect => {
+    if(!isCorrect){
+      setWrong([...Wrong, questions[currentQuestionIndex]]);
+      displayWrongAnswers(Wrong);
+    }
+
     if (isCorrect) {
       setScore(prevScore => prevScore + 1);
     }
@@ -57,6 +69,8 @@ function QuizComponent() {
       setFinished(true);
     }
   };
+
+  
 
   const handleRestartQuiz = () => {
     setCurrentQuestionIndex(0);
