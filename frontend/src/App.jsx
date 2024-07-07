@@ -5,17 +5,10 @@ import FavoritesPage from './History_and_Favs/FavoritesPage';
 import HistoryPage from './History_and_Favs/HistoryPage';
 import LandingPage from './LandingPage';
 import FetchDataComponent from './Learn/ShowCards';
-import QuizComponent from './Quiz/QuizComponent';
+import QuizComponent from './Quiz/Quiz2';
 import SignIn from './SignIn';
 import Translator from './Translator';
 
-const quizData = [
-  { id: 1, english: "Hello", klingon: "nuqneH" },
-  { id: 2, english: "Goodbye", klingon: "Qapla'" },
-  { id: 3, english: "Thank you", klingon: "tlho'" },
-  { id: 4, english: "Yes", klingon: "HIja'" },
-  { id: 5, english: "No", klingon: "ghobe'" }
-];
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const auth = getAuth(); 

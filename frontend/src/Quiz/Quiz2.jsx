@@ -1,8 +1,6 @@
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
-import UserDropdown from '../UserDropdown';
-import './QuizComponent.css';
-import QuizQuestion from './QuizQuestion';
+import './Quiz2.css';
 import QuizSummary from './QuizSummary';
 import StartQuiz from './StartQuiz';
 
@@ -15,9 +13,11 @@ function QuizComponent() {
   const [submittedCount, setSubmittedCount] = useState(0);
   const [showDropdown, setShowDropdown] = useState(false);
   const [profilePicUrl, setProfilePicUrl] = useState(null);
-  const [timer, setTimer] = useState(5);
+  const [timer, setTimer] = useState(30);
+  const [selectedOption, setSelectedOption] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const auth = getAuth();
-  const [Wrong, setWrong] = useState([]);
+
   useEffect(() => {
     fetchQuestions();
     const timerId = started && !finished && setInterval(() => {
@@ -33,7 +33,7 @@ function QuizComponent() {
   }, [timer, started, finished]);
 
   useEffect(() => {
-    setTimer(5);
+    setTimer(30);
   }, [currentQuestionIndex]);
 
   useEffect(() => {
@@ -62,18 +62,19 @@ function QuizComponent() {
       setScore(prevScore => prevScore + 1 + timer);
     }
     setSubmittedCount(submittedCount + 1);
+    setIsSubmitted(true);
   };
 
   const handleNextQuestion = () => {
     const nextQuestionIndex = currentQuestionIndex + 1;
     if (nextQuestionIndex < questions.length) {
       setCurrentQuestionIndex(nextQuestionIndex);
+      setSelectedOption('');
+      setIsSubmitted(false);
     } else {
       setFinished(true);
     }
   };
-
-  
 
   const handleRestartQuiz = () => {
     setCurrentQuestionIndex(0);
@@ -82,6 +83,20 @@ function QuizComponent() {
     setStarted(true);  
     setSubmittedCount(0);
     fetchQuestions();
+  };
+
+  const handleOptionSelect = option => {
+    if (!isSubmitted) {
+      setSelectedOption(option);
+    }
+  };
+
+  const handleSubmit = () => {
+    if (!isSubmitted) {
+      onAnswerSubmit(selectedOption === questions[currentQuestionIndex].options[questions[currentQuestionIndex].correct_index]);
+    } else {
+      handleNextQuestion();
+    }
   };
 
   return (
@@ -99,15 +114,21 @@ function QuizComponent() {
           <div className="timer">
             Time Remaining: {timer}s
           </div>
-          <QuizQuestion
-          question={questions[currentQuestionIndex].question}
-          options={questions[currentQuestionIndex].options}
-          correctIndex={questions[currentQuestionIndex].correct_index}
-          onAnswerSubmit={handleAnswerSubmit}
-          onNextQuestion={handleNextQuestion}
-          currentNumber={currentQuestionIndex}
-          totalQuestions={questions.length}
-        />
+          <div className="question-container">
+            <div className="question-box">
+              <h3>{questions[currentQuestionIndex].question}</h3>
+              {questions[currentQuestionIndex].options.map((option, index) => (
+                <div key={index} className={`option ${selectedOption === option ? 'selected' : ''} ${isSubmitted && (index === questions[currentQuestionIndex].correct_index ? 'correct' : (selectedOption === option ? 'incorrect' : ''))}`}>
+                  <button onClick={() => handleOptionSelect(option)} disabled={isSubmitted} className={selectedOption === option ? 'selected' : ''}>
+                    <span className="option-label">{String.fromCharCode(65 + index)}</span> {option}
+                  </button>
+                </div>
+              ))}
+              <button onClick={handleSubmit} className="submit-button">
+                {isSubmitted ? (currentQuestionIndex + 1 === questions.length ? 'See Summary' : 'Next Question') : 'Submit'}
+              </button>
+            </div>
+          </div>
         </div>
       ) : (
         <QuizSummary score={score} totalQuestions={questions.length} onRestartQuiz={handleRestartQuiz} />
