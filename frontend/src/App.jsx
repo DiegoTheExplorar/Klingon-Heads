@@ -5,7 +5,7 @@ import FavoritesPage from './History_and_Favs/FavoritesPage';
 import HistoryPage from './History_and_Favs/HistoryPage';
 import LandingPage from './LandingPage';
 import FetchDataComponent from './Learn/ShowCards';
-import QuizComponent from './Quiz/Quiz2';
+import QuizComponent from './Quiz/QuizComponent';
 import SignIn from './SignIn';
 import Translator from './Translator';
 

@@ -5,6 +5,17 @@ import './QuizComponent.css';
 import QuizQuestion from './QuizQuestion';
 import QuizSummary from './QuizSummary';
 import StartQuiz from './StartQuiz';
+const time = 5;
+
+const TimeUpModal = ({ onClose }) => (
+  <div className="modal-backdrop">
+    <div className="modal-content">
+      <h4>Time's Up!</h4>
+      <p>You didn't answer in time. Please try to be quicker next time!</p>
+      <button onClick={onClose} style={{ alignSelf: 'center' }}>Close</button>
+    </div>
+  </div>
+);
 
 function QuizComponent() {
   const [questions, setQuestions] = useState([]);
@@ -15,25 +26,39 @@ function QuizComponent() {
   const [submittedCount, setSubmittedCount] = useState(0);
   const [showDropdown, setShowDropdown] = useState(false);
   const [profilePicUrl, setProfilePicUrl] = useState(null);
-  const [timer, setTimer] = useState(5);
+  const [timer, setTimer] = useState(time);
   const auth = getAuth();
-  const [Wrong, setWrong] = useState([]);
+  const [Wrong,addWrong] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+
   useEffect(() => {
     fetchQuestions();
-    const timerId = started && !finished && setInterval(() => {
-      setTimer(prevTimer => (prevTimer > 0 ? prevTimer - 1 : 0));
-    }, 1000);
+  }, []);
+
+  useEffect(() => {
+    let timerId;
+    if (started && !finished && timer > 0) {  
+      timerId = setInterval(() => {
+        setTimer(prevTimer => (prevTimer > 0 ? prevTimer - 1 : 0));
+      }, 1000);
+    }
     return () => clearInterval(timerId);
-  }, [started, finished]);
+  }, [started, finished, timer]);
+  
 
   useEffect(() => {
     if (timer === 0 && started && !finished) {
-      handleAnswerSubmit(false);
+      setShowModal(true);
+      setTimeout(() => {
+        setShowModal(false);
+        handleAnswerSubmit(false); 
+      }, 3000); 
     }
   }, [timer, started, finished]);
+  
 
   useEffect(() => {
-    setTimer(5);
+    setTimer(time);
   }, [currentQuestionIndex]);
 
   useEffect(() => {
@@ -56,15 +81,27 @@ function QuizComponent() {
       console.error('Error fetching questions:', error);
     }
   };
-
   const handleAnswerSubmit = isCorrect => {
-    if (isCorrect) {
-      setScore(prevScore => prevScore + 1 + timer);
+    setTimer(-1)
+    const currentQuestion = questions[currentQuestionIndex];
+    if (!isCorrect) {
+      addWrong([...Wrong, {
+        question: currentQuestion.question,
+        correctOption: currentQuestion.options[currentQuestion.correct_index]
+      }]);
     }
-    setSubmittedCount(submittedCount + 1);
+    if (isCorrect) {
+      setScore(prevScore => prevScore + timer);
+    }
+    if(currentQuestionIndex === questions.length - 1) {
+      setSubmittedCount(prevCount => prevCount + 1);
+    }
   };
+  
+  
 
   const handleNextQuestion = () => {
+    setSubmittedCount(submittedCount + 1);
     const nextQuestionIndex = currentQuestionIndex + 1;
     if (nextQuestionIndex < questions.length) {
       setCurrentQuestionIndex(nextQuestionIndex);
@@ -82,10 +119,12 @@ function QuizComponent() {
     setStarted(true);  
     setSubmittedCount(0);
     fetchQuestions();
+    addWrong([]);
   };
 
   return (
     <div>
+
       {!started ? (
         <StartQuiz onStartQuiz={() => setStarted(true)} />
       ) : !finished ? (
@@ -94,10 +133,10 @@ function QuizComponent() {
             <div className="progress" style={{ width: `${(submittedCount / questions.length) * 100}%` }}></div>
           </div>
           <div className="score-tracker">
-            Score: {score} / {questions.length}
+            Score: {score}
           </div>
           <div className="timer">
-            Time Remaining: {timer}s
+          Time Remaining: {timer === -1 ? 0 : timer}s
           </div>
           <QuizQuestion
           question={questions[currentQuestionIndex].question}
@@ -108,9 +147,10 @@ function QuizComponent() {
           currentNumber={currentQuestionIndex}
           totalQuestions={questions.length}
         />
+        {showModal && <TimeUpModal onClose={() => setShowModal(false)} />}
         </div>
       ) : (
-        <QuizSummary score={score} totalQuestions={questions.length} onRestartQuiz={handleRestartQuiz} />
+        <QuizSummary score={score} onRestartQuiz={handleRestartQuiz} Wrong = {Wrong}/>
       )}
       <div className="user-icon-container" onClick={() => setShowDropdown(!showDropdown)}>
         {profilePicUrl ? (
