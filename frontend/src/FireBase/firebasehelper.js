@@ -1,8 +1,6 @@
 import { getAuth } from "firebase/auth";
-import { addDoc, collection, deleteDoc, doc, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { database } from "./firebaseConfig";
-
-
 
 export async function addHighScoreToFirestore(score, quizType) {
   const auth = getAuth();

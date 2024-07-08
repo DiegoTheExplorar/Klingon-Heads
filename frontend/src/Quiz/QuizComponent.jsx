@@ -4,7 +4,7 @@ import UserDropdown from '../UserDropdown';
 import './QuizComponent.css';
 import QuizQuestion from './QuizQuestion';
 import QuizSummary from './QuizSummary';
-const time = 30;
+const time = 5;
 
 const TimeUpModal = ({ onClose }) => (
   <div className="modal-backdrop">
@@ -29,6 +29,7 @@ function QuizComponent({ quizType }) {
   const [timer, setTimer] = useState(time);
   const [Wrong, addWrong] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchQuestions();
@@ -70,27 +71,19 @@ function QuizComponent({ quizType }) {
   }, [auth]);
 
   const fetchQuestions = async () => {
-    let url = '';
-    switch (quizType) {
-      case 'english':
-        url = 'https://klingonapi-cafaedb94044.herokuapp.com/quiz';
-        break;
-      case 'klingon':
-        url = 'https://klingonapi-cafaedb94044.herokuapp.com/klingon-question';
-        break;
-      default:
-        url = 'https://klingonapi-cafaedb94044.herokuapp.com/mixed-questions';
-        break;
-    }
+    setLoading(true);
+    let url = `https://klingonapi-cafaedb94044.herokuapp.com/${quizType}-questions`;
     try {
       const response = await fetch(url);
       const data = await response.json();
       setQuestions(data);
+      setTimer(time);
+      setLoading(false);
     } catch (error) {
       console.error('Error fetching questions:', error);
+      setLoading(false);
     }
   };
-
   const handleAnswerSubmit = isCorrect => {
     setTimer(-1)
     const currentQuestion = questions[currentQuestionIndex];
@@ -127,6 +120,10 @@ function QuizComponent({ quizType }) {
     fetchQuestions();
     addWrong([]);
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>

@@ -32,7 +32,7 @@ function StartQuiz() {
     try {
       const englishHighScore = await getHighScoreFromFirestore('english');
       const klingonHighScore = await getHighScoreFromFirestore('klingon');
-      const randomHighScore = await getHighScoreFromFirestore('random');
+      const randomHighScore = await getHighScoreFromFirestore('mixed');
       setHighScores({
         english: englishHighScore,
         klingon: klingonHighScore,
