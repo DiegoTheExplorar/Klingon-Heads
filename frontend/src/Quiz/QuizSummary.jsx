@@ -1,7 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { addHighScoreToFirestore, getHighScoreFromFirestore } from '../FireBase/firebasehelper';
 import './QuizSummary.css';
 
-function QuizSummary({ score,onRestartQuiz, Wrong }) {
+function QuizSummary({ score, onRestartQuiz, Wrong, quizType }) {
+  const [highScore, setHighScore] = useState(null);
+  const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    async function fetchHighScore() {
+      try {
+        const fetchedHighScore = await getHighScoreFromFirestore(quizType);
+        if (fetchedHighScore) {
+          setHighScore(fetchedHighScore.score);
+          if (score > fetchedHighScore.score) {
+            setMessage('Congratulations! You achieved a new high score!');
+            await addHighScoreToFirestore(score, quizType);
+          } else {
+            setMessage('Good job! Try again to beat your high score.');
+          }
+        } else {
+          setMessage('Congratulations! You set the first high score!');
+          await addHighScoreToFirestore(score, quizType);
+        }
+      } catch (error) {
+        console.error('Error fetching or updating high score:', error);
+      }
+    }
+    fetchHighScore();
+  }, [score, quizType]);
+
   const performanceAnalysis = score / 120 >= 0.8 ? 'Great job!' : 'Keep practicing!';
 
   const uniqueWrongAnswers = Wrong.reduce((unique, item) => {
@@ -14,8 +41,9 @@ function QuizSummary({ score,onRestartQuiz, Wrong }) {
   return (
     <div className="quiz-summary">
       <h2>Quiz Completed!</h2>
-      <p>Your final score is {score} out of {120}.</p>
+      <p>Your final score is {score} out of 120.</p>
       <p>{performanceAnalysis}</p>
+      <p>{message}</p>
       {uniqueWrongAnswers.length > 0 && (
         <div>
           <h3>Incorrectly Answered Questions:</h3>

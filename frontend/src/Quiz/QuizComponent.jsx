@@ -4,8 +4,7 @@ import UserDropdown from '../UserDropdown';
 import './QuizComponent.css';
 import QuizQuestion from './QuizQuestion';
 import QuizSummary from './QuizSummary';
-import StartQuiz from './StartQuiz';
-const time = 5;
+const time = 30;
 
 const TimeUpModal = ({ onClose }) => (
   <div className="modal-backdrop">
@@ -17,23 +16,23 @@ const TimeUpModal = ({ onClose }) => (
   </div>
 );
 
-function QuizComponent() {
+function QuizComponent({ quizType }) {
   const [questions, setQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
-  const [started, setStarted] = useState(false);
+  const [started, setStarted] = useState(true);
   const [submittedCount, setSubmittedCount] = useState(0);
   const [showDropdown, setShowDropdown] = useState(false);
+  const auth = getAuth();
   const [profilePicUrl, setProfilePicUrl] = useState(null);
   const [timer, setTimer] = useState(time);
-  const auth = getAuth();
-  const [Wrong,addWrong] = useState([]);
+  const [Wrong, addWrong] = useState([]);
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     fetchQuestions();
-  }, []);
+  }, [quizType]);
 
   useEffect(() => {
     let timerId;
@@ -44,7 +43,6 @@ function QuizComponent() {
     }
     return () => clearInterval(timerId);
   }, [started, finished, timer]);
-  
 
   useEffect(() => {
     if (timer === 0 && started && !finished) {
@@ -55,7 +53,6 @@ function QuizComponent() {
       }, 3000); 
     }
   }, [timer, started, finished]);
-  
 
   useEffect(() => {
     setTimer(time);
@@ -73,14 +70,27 @@ function QuizComponent() {
   }, [auth]);
 
   const fetchQuestions = async () => {
+    let url = '';
+    switch (quizType) {
+      case 'english':
+        url = 'https://klingonapi-cafaedb94044.herokuapp.com/quiz';
+        break;
+      case 'klingon':
+        url = 'https://klingonapi-cafaedb94044.herokuapp.com/klingon-question';
+        break;
+      default:
+        url = 'https://klingonapi-cafaedb94044.herokuapp.com/mixed-questions';
+        break;
+    }
     try {
-      const response = await fetch('https://klingonapi-cafaedb94044.herokuapp.com/quiz');
+      const response = await fetch(url);
       const data = await response.json();
       setQuestions(data);
     } catch (error) {
       console.error('Error fetching questions:', error);
     }
   };
+
   const handleAnswerSubmit = isCorrect => {
     setTimer(-1)
     const currentQuestion = questions[currentQuestionIndex];
@@ -93,12 +103,10 @@ function QuizComponent() {
     if (isCorrect) {
       setScore(prevScore => prevScore + timer);
     }
-    if(currentQuestionIndex === questions.length - 1) {
+    if (currentQuestionIndex === questions.length - 1) {
       setSubmittedCount(prevCount => prevCount + 1);
     }
   };
-  
-  
 
   const handleNextQuestion = () => {
     setSubmittedCount(submittedCount + 1);
@@ -110,13 +118,11 @@ function QuizComponent() {
     }
   };
 
-  
-
   const handleRestartQuiz = () => {
     setCurrentQuestionIndex(0);
     setScore(0);
     setFinished(false);
-    setStarted(true);  
+    setStarted(true);
     setSubmittedCount(0);
     fetchQuestions();
     addWrong([]);
@@ -124,10 +130,7 @@ function QuizComponent() {
 
   return (
     <div>
-
-      {!started ? (
-        <StartQuiz onStartQuiz={() => setStarted(true)} />
-      ) : !finished ? (
+      {!finished ? (
         <div className="quiz-container">
           <div className="progress-bar">
             <div className="progress" style={{ width: `${(submittedCount / questions.length) * 100}%` }}></div>
@@ -136,21 +139,23 @@ function QuizComponent() {
             Score: {score}
           </div>
           <div className="timer">
-          Time Remaining: {timer === -1 ? 0 : timer}s
+            Time Remaining: {timer === -1 ? 0 : timer}s
           </div>
-          <QuizQuestion
-          question={questions[currentQuestionIndex].question}
-          options={questions[currentQuestionIndex].options}
-          correctIndex={questions[currentQuestionIndex].correct_index}
-          onAnswerSubmit={handleAnswerSubmit}
-          onNextQuestion={handleNextQuestion}
-          currentNumber={currentQuestionIndex}
-          totalQuestions={questions.length}
-        />
-        {showModal && <TimeUpModal onClose={() => setShowModal(false)} />}
+          {questions.length > 0 && (
+            <QuizQuestion
+              question={questions[currentQuestionIndex].question}
+              options={questions[currentQuestionIndex].options}
+              correctIndex={questions[currentQuestionIndex].correct_index}
+              onAnswerSubmit={handleAnswerSubmit}
+              onNextQuestion={handleNextQuestion}
+              currentNumber={currentQuestionIndex}
+              totalQuestions={questions.length}
+            />
+          )}
+          {showModal && <TimeUpModal onClose={() => setShowModal(false)} />}
         </div>
       ) : (
-        <QuizSummary score={score} onRestartQuiz={handleRestartQuiz} Wrong = {Wrong}/>
+        <QuizSummary score={score} onRestartQuiz={handleRestartQuiz} Wrong={Wrong} quizType = {quizType} />
       )}
       <div className="user-icon-container" onClick={() => setShowDropdown(!showDropdown)}>
         {profilePicUrl ? (

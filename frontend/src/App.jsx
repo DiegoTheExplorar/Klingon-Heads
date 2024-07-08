@@ -5,7 +5,10 @@ import FavoritesPage from './History_and_Favs/FavoritesPage';
 import HistoryPage from './History_and_Favs/HistoryPage';
 import LandingPage from './LandingPage';
 import FetchDataComponent from './Learn/ShowCards';
-import QuizComponent from './Quiz/QuizComponent';
+import EnglishQuiz from './Quiz/EnglishQuiz';
+import KlingonQuiz from './Quiz/KlingonQuiz';
+import RandomQuiz from './Quiz/RandomQuiz';
+import StartQuiz from './Quiz/StartQuiz';
 import SignIn from './SignIn';
 import Translator from './Translator';
 
@@ -30,7 +33,10 @@ const App = () => {
         <Route path="/fav" element={isLoggedIn ? <FavoritesPage /> : <Navigate to="/signin" />} />
         <Route path="/history" element={isLoggedIn ? <HistoryPage /> : <Navigate to="/signin" />} />
         <Route path="/learn" element={<FetchDataComponent />} />
-        <Route path="/quiz" element={<QuizComponent/>} />
+        <Route path="/quiz" element={<StartQuiz/>} />
+        <Route path="/english-quiz" element={<EnglishQuiz />} />
+        <Route path="/klingon-quiz" element={<KlingonQuiz />} />
+        <Route path="/random-quiz" element={<RandomQuiz />} />
       </Routes>
     </Router>
   );
