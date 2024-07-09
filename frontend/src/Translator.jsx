@@ -1,16 +1,19 @@
 import { Client } from "@gradio/client";
 import closeIcon from '@iconify-icons/ic/twotone-close';
 import translateIcon from '@iconify-icons/mdi/arrow-forward';
+import cameraIcon from '@iconify-icons/mdi/camera';
 import copyIcon from '@iconify-icons/mdi/content-copy';
 import heartIcon from '@iconify-icons/mdi/heart';
 import historyIcon from '@iconify-icons/mdi/history';
 import microphoneIcon from '@iconify-icons/mdi/microphone';
 import swapIcon from '@iconify-icons/mdi/swap-horizontal-bold';
+import speakerIcon from '@iconify-icons/mdi/volume-high';
 import { Icon } from '@iconify/react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useNavigate } from 'react-router-dom';
+import Tesseract from 'tesseract.js';
 import { addFavoriteToFirestore, addHistoryToFirestore, checkFavoriteInFirestore, removeFavoriteBasedOnInput } from './FireBase/firebasehelper';
 import './Translator.css';
 import UserDropdown from './UserDropdown';
@@ -133,6 +136,35 @@ function Translator() {
     }
   };
 
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      Tesseract.recognize(
+        file,
+        'eng', 
+        {
+          logger: (m) => console.log(m),
+        }
+      )
+        .then(({ data: { text } }) => {
+          console.log("Recognized Text:", text);
+          setInput(text);
+        })
+        .catch(error => {
+          console.error('Failed to recognize text:', error);
+          alert('Error: Failed to recognize text');
+        })
+        .finally(() => {
+          Tesseract.terminate(); // Ensure Tesseract is terminated in all cases
+        });
+    }
+  };
+
+  const handleTextToSpeech = () => {
+    const utterance = new SpeechSynthesisUtterance(translation);
+    speechSynthesis.speak(utterance);
+  };
+
   const removeFavourite = async () => {
     if (!translation) return;
 
@@ -190,6 +222,18 @@ function Translator() {
           <button onClick={toggleListening} className="mic-button">
             <Icon icon={microphoneIcon} className="mic-icon" style={{ color: isListening ? 'red' : 'black' }} />
           </button>
+          <input
+            type="file"
+            accept="image/*"
+            capture="camera"
+            onChange={handleImageUpload}
+            style={{ display: 'none' }}
+            id="camera-input"
+            data-testid="camera-input"
+          />
+          <label htmlFor="camera-input" className="camera-button" data-testid="camera-button">
+            <Icon icon={cameraIcon} className="camera-icon" />
+          </label> 
           <button onClick={clearTextAreas} className="clear-button">
             <Icon icon={closeIcon} className="clear-button" />
           </button>
@@ -210,13 +254,17 @@ function Translator() {
             className="input"
             value={translating ? "Translating..." : translation}
             readOnly
+            data-testid="output-textarea"
           />
-          <button className="fav-button" onClick={isFavourite ?removeFavourite: handleFavourite}>
-            <Icon icon={heartIcon} className="fav-icon" style={{ color: isFavourite ? 'red' : 'black' }}/>
+          <button className="fav-button" onClick={isFavourite ? removeFavourite : handleFavourite} data-testid="fav-button">
+            <Icon icon={heartIcon} className="fav-icon" style={{ color: isFavourite ? 'red' : 'black' }} />
           </button>
           <CopyToClipboard text={translation} onCopy={() => alert('Copied!')}>
-              <Icon icon={copyIcon} className="copy-button" />
+            <Icon icon={copyIcon} className="copy-button" data-testid="copy-button" />
           </CopyToClipboard>
+          <button className="speaker-button" onClick={handleTextToSpeech}>
+            <Icon icon={speakerIcon} className="speaker-icon" />
+          </button>
         </div>
       </div>
       <div className="footer">
