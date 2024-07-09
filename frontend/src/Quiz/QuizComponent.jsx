@@ -16,6 +16,19 @@ const TimeUpModal = ({ onClose }) => (
   </div>
 );
 
+const Spinner = () => (
+  <div className="spinner-container">
+    <div className="spinner"></div>
+    <div>Loading...</div>
+  </div>
+);
+
+const ProgressBar = ({ submittedCount, totalQuestions }) => (
+  <div className="progress-bar">
+    <div className="progress" style={{ width: `${(submittedCount / totalQuestions) * 100}%` }}></div>
+  </div>
+);
+
 function QuizComponent({ quizType }) {
   const [questions, setQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -122,19 +135,15 @@ function QuizComponent({ quizType }) {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Spinner />;
   }
 
   return (
     <div>
       {!finished ? (
         <div className="quiz-container">
-          <div className="progress-bar">
-            <div className="progress" style={{ width: `${(submittedCount / questions.length) * 100}%` }}></div>
-          </div>
-          <div className="score-tracker">
-            Score: {score}
-          </div>
+          <ProgressBar submittedCount={submittedCount} totalQuestions={questions.length} />
+          <div className="score-tracker">Score: {score}</div>
           <div className="timer">
             Time Remaining: {timer === -1 ? 0 : timer}s
           </div>
