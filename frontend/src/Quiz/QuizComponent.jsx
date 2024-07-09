@@ -19,9 +19,9 @@ const TimeUpModal = ({ onClose }) => (
 const Spinner = () => (
   <div className="spinner-container">
     <div className="spinner"></div>
-    <div>Loading...</div>
   </div>
 );
+
 
 const ProgressBar = ({ submittedCount, totalQuestions }) => (
   <div className="progress-bar">
@@ -34,12 +34,10 @@ function QuizComponent({ quizType }) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
-  const [started, setStarted] = useState(true);
   const [submittedCount, setSubmittedCount] = useState(0);
   const [showDropdown, setShowDropdown] = useState(false);
   const auth = getAuth();
   const [profilePicUrl, setProfilePicUrl] = useState(null);
-  const [timer, setTimer] = useState(time);
   const [Wrong, addWrong] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -47,30 +45,6 @@ function QuizComponent({ quizType }) {
   useEffect(() => {
     fetchQuestions();
   }, [quizType]);
-
-  useEffect(() => {
-    let timerId;
-    if (started && !finished && timer > 0) {  
-      timerId = setInterval(() => {
-        setTimer(prevTimer => (prevTimer > 0 ? prevTimer - 1 : 0));
-      }, 1000);
-    }
-    return () => clearInterval(timerId);
-  }, [started, finished, timer]);
-
-  useEffect(() => {
-    if (timer === 0 && started && !finished) {
-      setShowModal(true);
-      setTimeout(() => {
-        setShowModal(false);
-        handleAnswerSubmit(false); 
-      }, 3000); 
-    }
-  }, [timer, started, finished]);
-
-  useEffect(() => {
-    setTimer(time);
-  }, [currentQuestionIndex]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, user => {
@@ -90,15 +64,14 @@ function QuizComponent({ quizType }) {
       const response = await fetch(url);
       const data = await response.json();
       setQuestions(data);
-      setTimer(time);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching questions:', error);
       setLoading(false);
     }
   };
-  const handleAnswerSubmit = isCorrect => {
-    setTimer(-1)
+
+  const handleAnswerSubmit = (isCorrect,remainingTime) => {
     const currentQuestion = questions[currentQuestionIndex];
     if (!isCorrect) {
       addWrong([...Wrong, {
@@ -107,7 +80,7 @@ function QuizComponent({ quizType }) {
       }]);
     }
     if (isCorrect) {
-      setScore(prevScore => prevScore + timer);
+      setScore(prevScore => prevScore + remainingTime); 
     }
     if (currentQuestionIndex === questions.length - 1) {
       setSubmittedCount(prevCount => prevCount + 1);
@@ -128,7 +101,6 @@ function QuizComponent({ quizType }) {
     setCurrentQuestionIndex(0);
     setScore(0);
     setFinished(false);
-    setStarted(true);
     setSubmittedCount(0);
     fetchQuestions();
     addWrong([]);
@@ -144,9 +116,6 @@ function QuizComponent({ quizType }) {
         <div className="quiz-container">
           <ProgressBar submittedCount={submittedCount} totalQuestions={questions.length} />
           <div className="score-tracker">Score: {score}</div>
-          <div className="timer">
-            Time Remaining: {timer === -1 ? 0 : timer}s
-          </div>
           {questions.length > 0 && (
             <QuizQuestion
               question={questions[currentQuestionIndex].question}
@@ -156,12 +125,13 @@ function QuizComponent({ quizType }) {
               onNextQuestion={handleNextQuestion}
               currentNumber={currentQuestionIndex}
               totalQuestions={questions.length}
+              onTimeUp={() => setShowModal(true)}
             />
           )}
           {showModal && <TimeUpModal onClose={() => setShowModal(false)} />}
         </div>
       ) : (
-        <QuizSummary score={score} onRestartQuiz={handleRestartQuiz} Wrong={Wrong} quizType = {quizType} />
+        <QuizSummary score={score} onRestartQuiz={handleRestartQuiz} Wrong={Wrong} quizType={quizType} />
       )}
       <div className="user-icon-container" onClick={() => setShowDropdown(!showDropdown)}>
         {profilePicUrl ? (

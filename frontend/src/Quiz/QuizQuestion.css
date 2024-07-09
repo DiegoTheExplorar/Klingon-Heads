@@ -1,3 +1,12 @@
+.timer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+  font-size: 17px;
+
+}
+
 .question-container {
   display: flex;
   flex-direction: column;
@@ -35,7 +44,7 @@
   text-align: left;
 }
 
-.option button.selected {
+.option.selected button {
   border-color: #007bff;
   background-color: #e7f3ff;
 }
@@ -63,8 +72,8 @@
   border-radius: 4px;
   cursor: pointer;
   margin-top: 20px;
+  transition: background-color 0.2s;
 }
-
 
 .submit-button:hover {
   background-color: #0056b3;

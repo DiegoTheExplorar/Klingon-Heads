@@ -1,13 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import './QuizQuestion.css';
-
-function QuizQuestion({ question, options, correctIndex, onAnswerSubmit, currentNumber, totalQuestions, onNextQuestion }) {
+const time = 5;
+function QuizQuestion({ question, options, correctIndex, onAnswerSubmit, onNextQuestion, currentNumber, totalQuestions, onTimeUp }) {
   const [selectedOption, setSelectedOption] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [timer, setTimer] = useState(time);
+  useEffect(() => {
+    const timerId = setInterval(() => {
+      setTimer(prevTimer => {
+        if (prevTimer > 1) return prevTimer - 1;
+        clearInterval(timerId);
+        if (!isSubmitted) {
+          onTimeUp();
+          onAnswerSubmit(false,0);
+          setIsSubmitted(true);
+        }
+        return 0;
+      });
+    }, 1000);
+
+    return () => clearInterval(timerId);
+  }, [isSubmitted]);
 
   useEffect(() => {
     setSelectedOption('');
     setIsSubmitted(false);
+    setTimer(time); 
   }, [question]);
 
   const handleOptionSelect = option => {
@@ -19,13 +37,16 @@ function QuizQuestion({ question, options, correctIndex, onAnswerSubmit, current
   const handleSubmit = () => {
     if (!isSubmitted) {
       setIsSubmitted(true);
-      onAnswerSubmit(selectedOption === options[correctIndex]); 
+      onAnswerSubmit(selectedOption === options[correctIndex],timer);
+      setTimer(0);
     } else {
       onNextQuestion();
     }
   };
 
   return (
+    <div>
+    <div className="timer">Time Remaining: {timer}s</div>
     <div className="question-container">
       <div className="question-box">
         <h3>{question}</h3>
@@ -41,10 +62,9 @@ function QuizQuestion({ question, options, correctIndex, onAnswerSubmit, current
         </button>
       </div>
     </div>
+    </div>
   );
 }
 
-
 export default QuizQuestion;
-
 
