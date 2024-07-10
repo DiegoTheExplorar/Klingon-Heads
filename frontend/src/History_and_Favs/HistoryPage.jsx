@@ -1,11 +1,10 @@
 import removeIcon from '@iconify-icons/ic/twotone-close';
 import arrowBack from '@iconify-icons/mdi/arrow-back';
 import { Icon } from '@iconify/react';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getHistory, removeHistoryFromFirestore } from '../FireBase/firebasehelper';
-import UserDropdown from '../UserDropdown';
 import './HistoryPage.css';
 
 function HistoryPage() {
@@ -13,8 +12,6 @@ function HistoryPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [filter, setFilter] = useState('all'); // State to manage filter selection
-    const [showDropdown, setShowDropdown] = useState(false);
-    const [profilePicUrl, setProfilePicUrl] = useState(null);
     const navigate = useNavigate();
     const auth = getAuth();
 
@@ -28,16 +25,6 @@ function HistoryPage() {
         });
     }, []);
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, user => {
-            if (user) {
-                setProfilePicUrl(user.photoURL);
-            } else {
-                setProfilePicUrl(null);
-            }
-        });
-        return () => unsubscribe();
-    }, [auth]);
 
 
     const handleFilterChange = (newFilter) => {
@@ -70,14 +57,6 @@ function HistoryPage() {
                 <Icon icon={arrowBack} className="back-icon" />
                 Back to Translator
             </button>
-            <div className="user-icon-container" onClick={() => setShowDropdown(!showDropdown)}>
-                {profilePicUrl ? (
-                    <img src={profilePicUrl} alt="User Icon" className="user-profile-pic" />
-                ) : (
-                    <div className="user-icon" />
-                )}
-                {showDropdown && <UserDropdown auth={auth} profilePicUrl={profilePicUrl} />}
-            </div>
             <img src="/Klingon-Heads-Logo.png" alt="Klingon Heads Logo" className="logo" />
             <h2 className="history-header">History</h2>
             <div className="filter-buttons">

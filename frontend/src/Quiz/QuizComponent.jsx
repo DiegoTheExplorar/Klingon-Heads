@@ -1,6 +1,4 @@
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
-import UserDropdown from '../UserDropdown';
 import './QuizComponent.css';
 import QuizQuestion from './QuizQuestion';
 import QuizSummary from './QuizSummary';
@@ -35,9 +33,6 @@ function QuizComponent({ quizType }) {
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
   const [submittedCount, setSubmittedCount] = useState(0);
-  const [showDropdown, setShowDropdown] = useState(false);
-  const auth = getAuth();
-  const [profilePicUrl, setProfilePicUrl] = useState(null);
   const [Wrong, addWrong] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -45,17 +40,6 @@ function QuizComponent({ quizType }) {
   useEffect(() => {
     fetchQuestions();
   }, [quizType]);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, user => {
-      if (user) {
-        setProfilePicUrl(user.photoURL);
-      } else {
-        setProfilePicUrl(null);
-      }
-    });
-    return () => unsubscribe();
-  }, [auth]);
 
   const fetchQuestions = async () => {
     setLoading(true);
@@ -133,14 +117,6 @@ function QuizComponent({ quizType }) {
       ) : (
         <QuizSummary score={score} onRestartQuiz={handleRestartQuiz} Wrong={Wrong} quizType={quizType} />
       )}
-      <div className="user-icon-container" onClick={() => setShowDropdown(!showDropdown)}>
-        {profilePicUrl ? (
-          <img src={profilePicUrl} alt="User Icon" className="user-profile-pic" />
-        ) : (
-          <div className="user-icon" />
-        )}
-        {showDropdown && <UserDropdown auth={auth} profilePicUrl={profilePicUrl} />}
-      </div>
     </div>
   );
 }

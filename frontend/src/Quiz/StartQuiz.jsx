@@ -61,14 +61,7 @@ function StartQuiz() {
           {highScores.random && <p className="high-score">High Score: {highScores.random.score}</p>}
         </div>
       </div>
-      <div className="user-icon-container" onClick={() => setShowDropdown(!showDropdown)}>
-        {profilePicUrl ? (
-          <img src={profilePicUrl} alt="User Icon" className="user-profile-pic" />
-        ) : (
-          <div className="user-icon" />
-        )}
-        {showDropdown && <UserDropdown auth={auth} profilePicUrl={profilePicUrl} />}
-      </div>
+      <UserDropdown/>
     </div>
   );
 }

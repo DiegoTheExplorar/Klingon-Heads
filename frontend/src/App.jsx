@@ -5,6 +5,7 @@ import FavoritesPage from './History_and_Favs/FavoritesPage';
 import HistoryPage from './History_and_Favs/HistoryPage';
 import LandingPage from './LandingPage';
 import FetchDataComponent from './Learn/ShowCards';
+import MainLayout from './MainLayout'; // Import the new layout
 import EnglishQuiz from './Quiz/EnglishQuiz';
 import KlingonQuiz from './Quiz/KlingonQuiz';
 import RandomQuiz from './Quiz/RandomQuiz';
@@ -14,29 +15,29 @@ import Translator from './Translator';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const auth = getAuth(); 
+  const auth = getAuth();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, user => {
       setIsLoggedIn(!!user);
     });
 
-    return () => unsubscribe(); 
+    return () => unsubscribe();
   }, [auth]);
 
   return (
     <Router>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/translator" element={isLoggedIn ? <Translator /> : <Navigate to="/signin" />} />
         <Route path="/signin" element={<SignIn />} />
-        <Route path="/fav" element={isLoggedIn ? <FavoritesPage /> : <Navigate to="/signin" />} />
-        <Route path="/history" element={isLoggedIn ? <HistoryPage /> : <Navigate to="/signin" />} />
-        <Route path="/learn" element={<FetchDataComponent />} />
-        <Route path="/quiz" element={<StartQuiz/>} />
-        <Route path="/english-quiz" element={<EnglishQuiz />} />
-        <Route path="/klingon-quiz" element={<KlingonQuiz />} />
-        <Route path="/random-quiz" element={<RandomQuiz />} />
+        <Route path="/translator" element={isLoggedIn ? <MainLayout><Translator /></MainLayout> : <Navigate to="/signin" />} />
+        <Route path="/fav" element={isLoggedIn ? <MainLayout><FavoritesPage /></MainLayout> : <Navigate to="/signin" />} />
+        <Route path="/history" element={isLoggedIn ? <MainLayout><HistoryPage /></MainLayout> : <Navigate to="/signin" />} />
+        <Route path="/learn" element={<MainLayout><FetchDataComponent /></MainLayout>} />
+        <Route path="/quiz" element={<MainLayout><StartQuiz/></MainLayout>} />
+        <Route path="/english-quiz" element={<MainLayout><EnglishQuiz /></MainLayout>} />
+        <Route path="/klingon-quiz" element={<MainLayout><KlingonQuiz /></MainLayout>} />
+        <Route path="/random-quiz" element={<MainLayout><RandomQuiz /></MainLayout>} />
       </Routes>
     </Router>
   );

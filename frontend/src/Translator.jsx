@@ -9,7 +9,7 @@ import microphoneIcon from '@iconify-icons/mdi/microphone';
 import swapIcon from '@iconify-icons/mdi/swap-horizontal-bold';
 import speakerIcon from '@iconify-icons/mdi/volume-high';
 import { Icon } from '@iconify/react';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useNavigate } from 'react-router-dom';
@@ -24,10 +24,8 @@ function Translator() {
   const [translating, setTranslating] = useState(false);
   const [translateToKlingon, setTranslateToKlingon] = useState(true); // State to toggle translation direction
   const [isFavourite, setIsFavourite] = useState(false); // State for favourite button
-  const [showDropdown, setShowDropdown] = useState(false); // State for user icon dropdown
   const [isListening, setIsListening] = useState(false);
   const [speechRecognition, setSpeechRecognition] = useState(null);
-  const [profilePicUrl, setProfilePicUrl] = useState(null);
   const navigate = useNavigate();
   const auth = getAuth();
 
@@ -57,23 +55,6 @@ function Translator() {
     setIsListening(!isListening);
   };
 
-  
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, user => {
-      if (user) {
-        // User is signed in
-        setProfilePicUrl(user.photoURL);
-      } else {
-        // No user is signed in
-        setProfilePicUrl(null);
-        console.log("No user is signed in.");
-      }
-    });
-  
-  
-    return () => unsubscribe();
-  }, []); 
-  
 
 
   const showFav = () => {
@@ -176,7 +157,7 @@ function Translator() {
       console.error("Error removing document: ", error);
       alert('Failed to remove to favourites.');
     }
-  };
+  };  
 
   const toggleTranslationDirection = () => {
     setTranslateToKlingon(!translateToKlingon);
@@ -191,18 +172,12 @@ function Translator() {
   };
 
   return (
+    <div>
+    <UserDropdown />
     <div className="container">
       <header className="text-center my-4">
         <img src="/Klingon-Heads-Logo.png" alt="Klingon Heads Logo" className="logo" />
       </header>
-      <div className="user-icon-container" onClick={() => setShowDropdown(!showDropdown)}>
-                {profilePicUrl ? (
-                    <img src={profilePicUrl} alt="User Icon" className="user-profile-pic" />
-                ) : (
-                    <div className="user-icon" />
-                )}
-                {showDropdown && <UserDropdown auth={auth} profilePicUrl={profilePicUrl} />}
-      </div>
       <div className="translation-container">
         <div className="english-input-container">
           <label htmlFor="english">{translateToKlingon ? "English" : "Klingon"}</label>
@@ -277,6 +252,7 @@ function Translator() {
           <span>Favourites</span>
         </div>
       </div>
+    </div>
     </div>
   );
 }
