@@ -199,3 +199,6 @@ dist/
 # Miscellaneous
 .DS_Store
 *.swp
+
+# Local Netlify folder
+.netlify
