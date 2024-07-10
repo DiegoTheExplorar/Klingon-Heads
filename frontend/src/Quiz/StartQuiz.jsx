@@ -2,7 +2,6 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getHighScoreFromFirestore } from '../FireBase/firebasehelper';
-import UserDropdown from '../UserDropdown';
 import './StartQuiz.css';
 
 function StartQuiz() {
@@ -61,7 +60,6 @@ function StartQuiz() {
           {highScores.random && <p className="high-score">High Score: {highScores.random.score}</p>}
         </div>
       </div>
-      <UserDropdown/>
     </div>
   );
 }

@@ -16,7 +16,6 @@ import { useNavigate } from 'react-router-dom';
 import Tesseract from 'tesseract.js';
 import { addFavoriteToFirestore, addHistoryToFirestore, checkFavoriteInFirestore, removeFavoriteBasedOnInput } from './FireBase/firebasehelper';
 import './Translator.css';
-import UserDropdown from './UserDropdown';
 
 function Translator() {
   const [input, setInput] = useState('');
@@ -173,7 +172,6 @@ function Translator() {
 
   return (
     <div>
-    <UserDropdown />
     <div className="container">
       <header className="text-center my-4">
         <img src="/Klingon-Heads-Logo.png" alt="Klingon Heads Logo" className="logo" />

@@ -1,10 +1,9 @@
 import React from 'react';
-import UserDropdown from './UserDropdown';
-
+import HamburgerMenu from './HamburgerMenu/Hamburger';
 const MainLayout = ({ children }) => {
   return (
     <>
-      <UserDropdown />
+      <HamburgerMenu />
       <div>{children}</div>
     </>
   );
