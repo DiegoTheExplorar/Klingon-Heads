@@ -5,13 +5,17 @@ import FavoritesPage from './History_and_Favs/FavoritesPage';
 import HistoryPage from './History_and_Favs/HistoryPage';
 import LandingPage from './LandingPage';
 import FetchDataComponent from './Learn/ShowCards';
-import MainLayout from './MainLayout'; // Import the new layout
+import MainLayout from './MainLayout';
 import EnglishQuiz from './Quiz/EnglishQuiz';
 import KlingonQuiz from './Quiz/KlingonQuiz';
 import RandomQuiz from './Quiz/RandomQuiz';
 import StartQuiz from './Quiz/StartQuiz';
 import SignIn from './SignIn';
 import Translator from './Translator';
+
+const PrivateRoute = ({ element, isLoggedIn }) => {
+  return isLoggedIn ? element : <Navigate to="/signin" />;
+};
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -25,19 +29,35 @@ const App = () => {
     return () => unsubscribe();
   }, [auth]);
 
+  const routes = [
+    { path: "/", element: <LandingPage /> },
+    { path: "/signin", element: <SignIn /> },
+    { path: "/translator", element: <Translator />, protected: true },
+    { path: "/fav", element: <FavoritesPage />, protected: true },
+    { path: "/history", element: <HistoryPage />, protected: true },
+    { path: "/learn", element: <FetchDataComponent />, protected: true },
+    { path: "/quiz", element: <StartQuiz />, protected: true },
+    { path: "/english-quiz", element: <EnglishQuiz />, protected: true },
+    { path: "/klingon-quiz", element: <KlingonQuiz /> , protected: true},
+    { path: "/random-quiz", element: <RandomQuiz />, protected: true },
+  ];
+
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/translator" element={isLoggedIn ? <MainLayout><Translator /></MainLayout> : <Navigate to="/signin" />} />
-        <Route path="/fav" element={isLoggedIn ? <MainLayout><FavoritesPage /></MainLayout> : <Navigate to="/signin" />} />
-        <Route path="/history" element={isLoggedIn ? <MainLayout><HistoryPage /></MainLayout> : <Navigate to="/signin" />} />
-        <Route path="/learn" element={<MainLayout><FetchDataComponent /></MainLayout>} />
-        <Route path="/quiz" element={<MainLayout><StartQuiz/></MainLayout>} />
-        <Route path="/english-quiz" element={<MainLayout><EnglishQuiz /></MainLayout>} />
-        <Route path="/klingon-quiz" element={<MainLayout><KlingonQuiz /></MainLayout>} />
-        <Route path="/random-quiz" element={<MainLayout><RandomQuiz /></MainLayout>} />
+        {routes.map(({ path, element, protected: isProtected }) => (
+          <Route
+            key={path}
+            path={path}
+            element={
+              isProtected ? (
+                <PrivateRoute element={<MainLayout>{element}</MainLayout>} isLoggedIn={isLoggedIn} />
+              ) : (
+                element
+              )
+            }
+          />
+        ))}
       </Routes>
     </Router>
   );
