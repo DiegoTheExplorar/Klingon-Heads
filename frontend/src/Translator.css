@@ -28,7 +28,7 @@ header {
 }
 
 .logo {
-  height: 175px; /* Adjust the logo size as needed */
+  height: 175px;
 }
 
 
@@ -44,12 +44,12 @@ header {
 
 .english-input-container {
   width: 50%;
-  position: relative; /* Add position relative for positioning mic button */
+  position: relative;
 }
 
 .klingon-output-container {
   width: 50%;
-  position: relative; /* Add position relative for positioning fav button */
+  position: relative;
 }
 
 .english-input-container label,
@@ -189,7 +189,7 @@ header {
   cursor: pointer;
   position: absolute;
   bottom: 10px;
-  right: 50px; /* Adjust as necessary to position next to fav button */
+  right: 50px; 
 }
 
 .speaker-icon {

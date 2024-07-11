@@ -30,3 +30,23 @@
 .card.flipped .card-back {
     transform: rotateY(0deg);
 }
+
+@media (max-width: 768px) {
+    .card {
+        width: 300px;
+        height: 225px;
+        margin: 10px auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .card {
+        width: 260px;
+        height: 195px;
+        margin: 5px auto;
+    }
+
+    .card-front, .card-back {
+        border-radius: 5px;
+    }
+}

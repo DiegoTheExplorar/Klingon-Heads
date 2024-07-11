@@ -1,10 +1,9 @@
-.timer{
+.timer {
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 20px;
-  font-size: 17px;
-
+  font-size: 17px; /* Unchanged font size */
 }
 
 .question-container {
@@ -19,8 +18,8 @@
   border: 1px solid #ccc;
   border-radius: 8px;
   padding: 20px;
-  width: 500px;
   max-width: 600px;
+  width: 500px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
@@ -34,7 +33,6 @@
 
 .option button {
   width: 100%;
-  max-width: 500px;
   padding: 10px;
   background-color: #fff;
   border: 2px solid #ccc;
@@ -77,4 +75,18 @@
 
 .submit-button:hover {
   background-color: #0056b3;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 600px) {
+  .timer, .question-container, .option {
+    margin: 10px; /* Reduced margin for smaller screens */
+  }
+
+  .option button, .submit-button {
+    padding: 15px; /* Adjust padding for smaller screens */
+  }
+  .question-box{
+    width: 300px;
+  }
 }
