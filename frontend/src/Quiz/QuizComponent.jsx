@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import './QuizComponent.css';
 import QuizQuestion from './QuizQuestion';
 import QuizSummary from './QuizSummary';
-const time = 5;
 
 const TimeUpModal = ({ onClose }) => (
   <div className="modal-backdrop">

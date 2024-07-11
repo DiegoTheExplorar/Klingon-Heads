@@ -1,7 +1,5 @@
 import axios from 'axios';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import React, { useEffect, useState } from 'react';
-import UserDropdown from '../UserDropdown';
+import React, { useState } from 'react';
 import '../UserDropdown.css';
 import FlashCard from './FlashCard';
 import InitialCard from './InitialCard';
@@ -10,20 +8,7 @@ function FetchDataComponent() {
     const [flashcard, setFlashcard] = useState(null);
     const [error, setError] = useState('');
     const [hasFetched, setHasFetched] = useState(false);
-    const [showDropdown, setShowDropdown] = useState(false);
-    const auth = getAuth();
-    const [profilePicUrl, setProfilePicUrl] = useState(null);
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, user => {
-            if (user) {
-                setProfilePicUrl(user.photoURL);
-            } else {
-                setProfilePicUrl(null);
-            }
-        });
-        return () => unsubscribe();
-    }, [auth]);
 
     const fetchFlashcard = async () => {
         try {
@@ -51,14 +36,6 @@ function FetchDataComponent() {
                         </button>
                     </>
                 )}
-            </div>
-            <div className="user-icon-container" onClick={() => setShowDropdown(!showDropdown)}>
-                {profilePicUrl ? (
-                    <img src={profilePicUrl} alt="User Icon" className="user-profile-pic" />
-                ) : (
-                    <div className="user-icon" />
-                )}
-                {showDropdown && <UserDropdown auth={auth} profilePicUrl={profilePicUrl} />}
             </div>
         </div>
     );

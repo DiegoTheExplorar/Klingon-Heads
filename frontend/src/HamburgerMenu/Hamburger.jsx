@@ -1,3 +1,5 @@
+import { faBook, faHistory, faHome, faLanguage, faQuestionCircle, faSignOutAlt, faStar } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -47,11 +49,27 @@ const HamburgerMenu = () => {
         &#9776;
       </div>
       <div className={`menu ${isOpen ? 'open' : ''}`}>
-        <a href="#" onClick={() => { navigate('/'); closeMenu(); }}>Home</a>
-        <a href="#" onClick={() => { navigate('/translator'); closeMenu(); }}>Translator</a>
-        <a href="#" onClick={() => { navigate('/quiz'); closeMenu(); }}>Quiz</a>
-        <a href="#" onClick={() => { navigate('/learn'); closeMenu(); }}>Learn</a>
-        <button onClick={() => { handleSignOut(); closeMenu(); }} className="sign-out-button">Sign Out</button>
+        <button onClick={() => { navigate('/'); closeMenu(); }}>
+          <FontAwesomeIcon icon={faHome} /> Home
+        </button>
+        <button onClick={() => { navigate('/translator'); closeMenu(); }}>
+          <FontAwesomeIcon icon={faLanguage} /> Translator
+        </button>
+        <button onClick={() => { navigate('/quiz'); closeMenu(); }}>
+          <FontAwesomeIcon icon={faQuestionCircle} /> Quiz
+        </button>
+        <button onClick={() => { navigate('/learn'); closeMenu(); }}>
+          <FontAwesomeIcon icon={faBook} /> Learn
+        </button>
+        <button onClick={() => { navigate('/fav'); closeMenu(); }}>
+          <FontAwesomeIcon icon={faStar} /> Favorites
+        </button>
+        <button onClick={() => { navigate('/history'); closeMenu(); }}>
+          <FontAwesomeIcon icon={faHistory} /> History
+        </button>
+        <button className="sign-out-button" onClick={() => { handleSignOut(); closeMenu(); }}>
+          <FontAwesomeIcon icon={faSignOutAlt} /> Sign Out
+        </button>
         {profilePicUrl && (
           <div className="profile-container">
             <img src={profilePicUrl} alt="Profile" className="profile-pic" />
@@ -61,6 +79,6 @@ const HamburgerMenu = () => {
       </div>
     </div>
   );
-};
+}
 
 export default HamburgerMenu;

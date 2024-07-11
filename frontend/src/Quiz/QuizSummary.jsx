@@ -29,7 +29,7 @@ function QuizSummary({ score, onRestartQuiz, Wrong, quizType }) {
     fetchHighScore();
   }, [score, quizType]);
 
-  const performanceAnalysis = score / 120 >= 0.8 ? 'Great job!' : 'Keep practicing!';
+  const performanceAnalysis = score / 60 >= 0.8 ? 'Great job!' : 'Keep practicing!';
 
   const uniqueWrongAnswers = Wrong.reduce((unique, item) => {
     if (!unique.some(obj => obj.question === item.question)) {
@@ -41,7 +41,7 @@ function QuizSummary({ score, onRestartQuiz, Wrong, quizType }) {
   return (
     <div className="quiz-summary">
       <h2>Quiz Completed!</h2>
-      <p>Your final score is {score} out of 120.</p>
+      <p>Your final score is {score} out of 60.</p>
       <p>{performanceAnalysis}</p>
       <p>{message}</p>
       {uniqueWrongAnswers.length > 0 && (

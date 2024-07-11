@@ -25,8 +25,6 @@ function HistoryPage() {
         });
     }, []);
 
-
-
     const handleFilterChange = (newFilter) => {
         setFilter(newFilter);
     };
@@ -101,6 +99,5 @@ function HistoryPage() {
         </div>
     );
 }
-
 
 export default HistoryPage;

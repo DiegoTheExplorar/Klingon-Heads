@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './QuizQuestion.css';
-const time = 5;
+const time = 15;
 function QuizQuestion({ question, options, correctIndex, onAnswerSubmit, onNextQuestion, currentNumber, totalQuestions, onTimeUp }) {
   const [selectedOption, setSelectedOption] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);

@@ -4,25 +4,25 @@ html, body {
     font-family: 'Arial', sans-serif;
     color: black;
     min-height: 100vh;
-    overflow-x: hidden; 
+    overflow-x: hidden;
 }
 
 body {
     display: flex;
     justify-content: center;
-    align-items: flex-start; 
+    align-items: flex-start;
 }
 
 .history-page {
     text-align: center;
-    width: 100%; 
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 2rem;
-    margin: 1rem auto; 
+    margin: 1rem auto;
     box-sizing: border-box;
-    min-height: 100vh; 
+    min-height: 100vh;
 }
 
 .logo {
@@ -59,6 +59,13 @@ body {
     width: 100%;
     display: flex;
     justify-content: center;
+    max-height: 400px; /* Set a fixed height for the table container */
+    overflow-y: auto; /* Make the container scrollable */
+    scrollbar-width: none; /* Hide scrollbar in Firefox */
+}
+
+.history-table::-webkit-scrollbar {
+    display: none; /* Hide scrollbar in WebKit browsers */
 }
 
 .history-table-column {
@@ -101,8 +108,8 @@ body {
 
 .back-button {
     position: fixed;
-    left: 10px; /* Adjusted to make it fully visible */
-    top: 10px; /* Adjusted to make it fully visible */
+    left: 10px;
+    top: 10px;
     background: none;
     border: none;
     font-size: 1.5em;
@@ -110,7 +117,7 @@ body {
     display: flex;
     align-items: center;
     gap: 5px;
-    line-height: 1; /* Ensures the icon and text are on the same line */
+    line-height: 1;
 }
 
 .back-icon {
@@ -126,9 +133,9 @@ body {
 }
 
 .user-profile-pic {
-    width: 24px; /* Adjust the width to your preference */
-    height: 24px; /* Adjust the height to your preference */
-    border-radius: 50%; /* Ensures the image is circular */
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
 }
 
 .user-icon {

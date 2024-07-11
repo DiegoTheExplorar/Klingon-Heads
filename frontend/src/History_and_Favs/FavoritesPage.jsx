@@ -25,8 +25,6 @@ function FavoritesPage() {
         });
     }, []);
 
-
-
     const handleFilterChange = (newFilter) => {
         setFilter(newFilter);
     };
