@@ -67,6 +67,7 @@ header {
   border: 1px solid #ccc;
   background: #fff;
   color: black;
+  resize: none;
 }
 
 .clear-button{

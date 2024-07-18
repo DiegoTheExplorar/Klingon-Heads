@@ -1,12 +1,12 @@
-import axios from 'axios';
-import React, { useState, useEffect } from 'react';
-import './ShowCards.css'
-import FlashCard from './FlashCard';
-import InitialCard from './InitialCard';
-import { Icon } from '@iconify/react';
 import arrowRight from '@iconify-icons/mdi/arrow-right';
 import heartIcon from '@iconify-icons/mdi/heart';
+import { Icon } from '@iconify/react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { addFavoriteToFirestore, checkFavoriteInFirestore, removeFavoriteBasedOnInput } from '../FireBase/firebasehelper';
+import FlashCard from './FlashCard';
+import InitialCard from './InitialCard';
+import './ShowCards.css';
 
 
 function FetchDataComponent() {
@@ -68,8 +68,8 @@ function FetchDataComponent() {
                         <button className="next-button" onClick={fetchFlashcard}>
                             <Icon icon={arrowRight} className="next-icon" />
                         </button>
-                        <button className="fav-button" onClick={isFavourite ? removeFavourite : handleFavourite} data-testid="fav-button">
-                            <Icon icon={heartIcon} className="fav-icon" style={{ color: isFavourite ? 'red' : 'black' }} />
+                        <button className="favs-button" onClick={isFavourite ? removeFavourite : handleFavourite} data-testid="favs-button">
+                            <Icon icon={heartIcon} className="favs-icon" style={{ color: isFavourite ? 'red' : 'black' }} />
                         </button>
                     </div>
                 </>
