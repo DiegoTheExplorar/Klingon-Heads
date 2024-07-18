@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import './QuizComponent.css';
 import QuizQuestion from './QuizQuestion';
 import QuizSummary from './QuizSummary';
+import { useNavigate } from 'react-router-dom';
+import { Icon } from '@iconify/react';
+import arrowBack from '@iconify-icons/mdi/arrow-back';
 
 const TimeUpModal = ({ onClose }) => (
   <div className="modal-backdrop">
@@ -35,6 +38,7 @@ function QuizComponent({ quizType }) {
   const [Wrong, addWrong] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchQuestions();
@@ -95,27 +99,34 @@ function QuizComponent({ quizType }) {
 
   return (
     <div>
-      {!finished ? (
-        <div className="quiz-container">
-          <ProgressBar submittedCount={submittedCount} totalQuestions={questions.length} />
-          <div className="score-tracker">Score: {score}</div>
-          {questions.length > 0 && (
-            <QuizQuestion
-              question={questions[currentQuestionIndex].question}
-              options={questions[currentQuestionIndex].options}
-              correctIndex={questions[currentQuestionIndex].correct_index}
-              onAnswerSubmit={handleAnswerSubmit}
-              onNextQuestion={handleNextQuestion}
-              currentNumber={currentQuestionIndex}
-              totalQuestions={questions.length}
-              onTimeUp={() => setShowModal(true)}
-            />
-          )}
-          {showModal && <TimeUpModal onClose={() => setShowModal(false)} />}
-        </div>
-      ) : (
-        <QuizSummary score={score} onRestartQuiz={handleRestartQuiz} Wrong={Wrong} quizType={quizType} />
-      )}
+      <button className="back-button" onClick={() => navigate('/quiz')}>
+        <Icon icon={arrowBack} className="back-icon" />
+      </button>
+      <div>
+        {!finished ? (
+          <div className="quiz-container">
+            <ProgressBar submittedCount={submittedCount} totalQuestions={questions.length} />
+            <div className="quiz-info">
+              <div className="score-tracker">Score: {score}</div>
+            </div>
+            {questions.length > 0 && (
+              <QuizQuestion
+                question={questions[currentQuestionIndex].question}
+                options={questions[currentQuestionIndex].options}
+                correctIndex={questions[currentQuestionIndex].correct_index}
+                onAnswerSubmit={handleAnswerSubmit}
+                onNextQuestion={handleNextQuestion}
+                currentNumber={currentQuestionIndex}
+                totalQuestions={questions.length}
+                onTimeUp={() => setShowModal(true)}
+              />
+            )}
+            {showModal && <TimeUpModal onClose={() => setShowModal(false)} />}
+          </div>
+        ) : (
+          <QuizSummary score={score} onRestartQuiz={handleRestartQuiz} Wrong={Wrong} quizType={quizType} />
+        )}
+      </div>
     </div>
   );
 }

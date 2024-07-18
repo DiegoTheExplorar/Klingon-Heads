@@ -40,18 +40,16 @@ function QuizSummary({ score, onRestartQuiz, Wrong, quizType }) {
 
   return (
     <div className="quiz-summary">
-      <h2>Quiz Completed!</h2>
-      <p>Your final score is {score} out of 60.</p>
-      <p>{performanceAnalysis}</p>
-      <p>{message}</p>
+      <h2 style={{fontSize: '64px', fontWeight: 'bold', textAlign: 'center'}}>Completed!</h2>
+      <h3 style={{fontSize: '24px'}}>Your final score is {score} out of 60.</h3>
+      <h3 style={{fontSize: '24px'}}>{performanceAnalysis}</h3>
       {uniqueWrongAnswers.length > 0 && (
         <div>
-          <h3>Incorrectly Answered Questions:</h3>
           <ul>
             {uniqueWrongAnswers.map((item, index) => (
               <li key={index}>
-                <p>Question: {item.question}</p>
-                <p>Correct Answer: {item.correctOption}</p>
+                <p style={{color: 'red'}}>Question: {item.question}</p>
+                <p style={{color: 'green'}}>Correct Answer: {item.correctOption}</p>
               </li>
             ))}
           </ul>

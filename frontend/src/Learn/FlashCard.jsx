@@ -15,7 +15,7 @@ function Flashcard({ flashcard }) {
             case 'Medium':
                 return { backgroundColor: 'orange' };
             case 'Hard':
-                return { backgroundColor: 'red' };
+                return { backgroundColor: 'lightcoral' };
             default:
                 return {};
         }
@@ -24,16 +24,18 @@ function Flashcard({ flashcard }) {
     if (!flashcard) return null;
 
     return (
-        <div onClick={handleCardClick} className={`card ${isFlipped ? 'flipped' : ''}`}>
+        <div>
+          <h2 style={{fontSize: '24px', fontWeight: 'bold' , textAlign: 'center'}}>{flashcard.difficulty}</h2>
+          <div onClick={handleCardClick} className={`card ${isFlipped ? 'flipped' : ''}`}>
             <div className="card-front" style={getCardStyle(flashcard.difficulty)}>
-                <p>{flashcard.english}</p>
+              <p>{flashcard.english}</p>
             </div>
             <div className="card-back" style={getCardStyle(flashcard.difficulty)}>
-                <p>{flashcard.klingon}</p>
-                <p>{flashcard.difficulty}</p>
+              <p>{flashcard.klingon}</p>
             </div>
+          </div>
         </div>
-    );
-}
+      );
+    }
 
 export default Flashcard;

@@ -44,8 +44,9 @@ function StartQuiz() {
 
   return (
     <div className="start-quiz-container">
-      <h1>Welcome to the Quiz!</h1>
-      <p>Test your knowledge and see how much you can score.</p>
+      <img src="/Klingon-Heads-Logo.png" alt="Klingon Heads Logo" className="logo" />
+      <h1 className="quiz-header">Quiz</h1>
+      <p>Test your knowledge and see how much you can score!</p>
       <div className="quiz-options">
         <div className="quiz-button">
           <button onClick={() => navigate('/english-quiz')} className="start-quiz-button">English Quiz</button>

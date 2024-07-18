@@ -1,18 +1,15 @@
-import { Client } from "@gradio/client";
+import axios from 'axios';
 import closeIcon from '@iconify-icons/ic/twotone-close';
 import translateIcon from '@iconify-icons/mdi/arrow-forward';
 import cameraIcon from '@iconify-icons/mdi/camera';
 import copyIcon from '@iconify-icons/mdi/content-copy';
 import heartIcon from '@iconify-icons/mdi/heart';
-import historyIcon from '@iconify-icons/mdi/history';
 import microphoneIcon from '@iconify-icons/mdi/microphone';
 import swapIcon from '@iconify-icons/mdi/swap-horizontal-bold';
 import speakerIcon from '@iconify-icons/mdi/volume-high';
 import { Icon } from '@iconify/react';
-import { getAuth } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { useNavigate } from 'react-router-dom';
 import Tesseract from 'tesseract.js';
 import { addFavoriteToFirestore, addHistoryToFirestore, checkFavoriteInFirestore, removeFavoriteBasedOnInput } from './FireBase/firebasehelper';
 import './Translator.css';
@@ -25,8 +22,6 @@ function Translator() {
   const [isFavourite, setIsFavourite] = useState(false); // State for favourite button
   const [isListening, setIsListening] = useState(false);
   const [speechRecognition, setSpeechRecognition] = useState(null);
-  const navigate = useNavigate();
-  const auth = getAuth();
 
 
   useEffect(() => {
@@ -54,32 +49,30 @@ function Translator() {
     setIsListening(!isListening);
   };
 
-
-
-  const showFav = () => {
-    navigate('/fav'); // Navigate to favourites
-  };
-
-  const showHistory = () => {
-    navigate('/history'); // Navigate to history
-  };
-
   const translateText = async () => {
     if (!input.trim()) {
       alert(`Please enter some ${translateToKlingon ? "English" : "Klingon"} text.`);
       return;
     }
-
+  
     try {
       setTranslating(true);
-      const ETK = await Client.connect("DiegoTheExplorar/KlingonHeads");
-      const KTE = await Client.connect("DiegoTheExplorar/KlingonHeads_Klingon_To_English");
-      const client = translateToKlingon ? ETK : KTE;
-      const data = translateToKlingon ? { english_sentence: input } : { klingon_sentence: input };
-      const result = await client.predict("/predict", data);
-      setTranslation(result.data);
-      addHistoryToFirestore(input, result.data,translateToKlingon ? "English" : "Klingon");
-      FavinDB();
+      
+      const apiUrl = translateToKlingon
+      ? "https://api-inference.huggingface.co/models/TechRaj/ETK_t5base_e7"
+      : "https://api-inference.huggingface.co/models/TechRaj/KTE_t5base_e7";
+
+      const response = await retryRequest(apiUrl, { inputs: input }, 3, 5000);
+
+      if (response) {
+        const result = response.data;
+        const cleanResult = result[0]?.generated_text.replace('BOS> ', '').replace(' EOS>', '') || 'No translation found';
+        setTranslation(cleanResult);
+        addHistoryToFirestore(input, cleanResult, translateToKlingon ? "English" : "Klingon");
+        FavinDB();
+      } else {
+        setTranslation('Error: Failed to translate');
+      }
     } catch (error) {
       console.error('Failed to translate:', error);
       setTranslation('Error: Failed to translate');
@@ -87,6 +80,30 @@ function Translator() {
       setTranslating(false);
     }
   };
+
+  const retryRequest = async (url, data, retries, delay) => {
+    for (let i = 0; i < retries; i++) {
+      try {
+        const response = await axios.post(url, data, {
+          headers: {
+            Authorization: `Bearer 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`,
+            'Content-Type': 'application/json',
+          },
+        });
+        return response;
+      } catch (error) {
+        if (error.response && error.response.status === 503) {
+          console.log(`Retry ${i + 1}/${retries}: Model is still loading, retrying in ${delay / 1000} seconds...`);
+          await new Promise(res => setTimeout(res, delay));
+        } else {
+          console.error('Failed to translate:', error);
+          break;
+        }
+      }
+    }
+    return null;
+  };
+
 
   const FavinDB = async() => {
     if(!input) return;
@@ -238,16 +255,6 @@ function Translator() {
           <button className="speaker-button" onClick={handleTextToSpeech}>
             <Icon icon={speakerIcon} className="speaker-icon" />
           </button>
-        </div>
-      </div>
-      <div className="footer">
-        <div className="footer-icon-container" onClick={showHistory}>
-          <Icon icon={historyIcon} className="footer-icon" />
-          <span>History</span>
-        </div>
-        <div className="footer-icon-container" onClick={showFav}>
-          <Icon icon={heartIcon} className="footer-icon" />
-          <span>Favourites</span>
         </div>
       </div>
     </div>

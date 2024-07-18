@@ -1,9 +1,6 @@
 import removeIcon from '@iconify-icons/ic/twotone-close';
-import arrowBack from '@iconify-icons/mdi/arrow-back';
 import { Icon } from '@iconify/react';
-import { getAuth } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { getAllFavorites, removeFavoriteFromFirestore } from '../FireBase/firebasehelper';
 import './FavoritesPage.css';
 
@@ -12,8 +9,7 @@ function FavoritesPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [filter, setFilter] = useState('all');
-    const navigate = useNavigate();
-    const auth = getAuth();
+
 
     useEffect(() => {
         getAllFavorites().then(favs => {
@@ -50,10 +46,6 @@ function FavoritesPage() {
 
     return (
         <div className="favorites-page">
-            <button className="back-button" onClick={() => navigate('/translator')}>
-                <Icon icon={arrowBack} className="back-icon" />
-                Back to Translator
-            </button>
             <img src="/Klingon-Heads-Logo.png" alt="Klingon Heads Logo" className="logo" />
             <h2 className="favorites-header">Favorites</h2>
             <div className="filter-buttons">

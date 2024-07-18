@@ -1,14 +1,29 @@
 import axios from 'axios';
-import React, { useState } from 'react';
-import '../UserDropdown.css';
+import React, { useState, useEffect } from 'react';
+import './ShowCards.css'
 import FlashCard from './FlashCard';
 import InitialCard from './InitialCard';
+import { Icon } from '@iconify/react';
+import arrowRight from '@iconify-icons/mdi/arrow-right';
+import heartIcon from '@iconify-icons/mdi/heart';
+import { addFavoriteToFirestore, checkFavoriteInFirestore, removeFavoriteBasedOnInput } from '../FireBase/firebasehelper';
+
 
 function FetchDataComponent() {
     const [flashcard, setFlashcard] = useState(null);
     const [error, setError] = useState('');
     const [hasFetched, setHasFetched] = useState(false);
+    const [isFavourite, setIsFavourite] = useState(false);
 
+    useEffect(() => {
+        if (flashcard) {
+            const checkFavouriteStatus = async () => {
+                const exists = await checkFavoriteInFirestore(flashcard.english);
+                setIsFavourite(exists);
+            };
+            checkFavouriteStatus();
+        }
+    }, [flashcard]);
 
     const fetchFlashcard = async () => {
         try {
@@ -22,23 +37,45 @@ function FetchDataComponent() {
         }
     };
 
+    const handleFavourite = async () => {
+        try {
+            await addFavoriteToFirestore(flashcard.english, flashcard.klingon, "Klingon");
+            setIsFavourite(true);
+        } catch (error) {
+            console.error("Error adding to favorites: ", error);
+            alert('Failed to add to favourites.');
+        }
+    };
+
+    const removeFavourite = async () => {
+        try {
+            await removeFavoriteBasedOnInput(flashcard.english);
+            setIsFavourite(false);
+        } catch (error) {
+            console.error("Error removing from favorites: ", error);
+            alert('Failed to remove from favourites.');
+        }
+    };
 
     return (
-        <div>
-            <div style={{ padding: '20px', textAlign: 'center' }}>
-                {!hasFetched ? (
-                    <InitialCard fetchFlashcard={fetchFlashcard} />
-                ) : (
-                    <>
-                        <FlashCard flashcard={flashcard} />
-                        <button onClick={fetchFlashcard} style={{ fontSize: '16px', padding: '10px', marginTop: '20px' }}>
-                            Next Flashcard
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+            {!hasFetched ? (
+                <InitialCard fetchFlashcard={fetchFlashcard} />
+            ) : (
+                <>
+                    <FlashCard flashcard={flashcard} handleFavourite={isFavourite ? removeFavourite : handleFavourite} isFavourite={isFavourite} />
+                    <div className="button-container">
+                        <button className="next-button" onClick={fetchFlashcard}>
+                            <Icon icon={arrowRight} className="next-icon" />
                         </button>
-                    </>
-                )}
-            </div>
+                        <button className="fav-button" onClick={isFavourite ? removeFavourite : handleFavourite} data-testid="fav-button">
+                            <Icon icon={heartIcon} className="fav-icon" style={{ color: isFavourite ? 'red' : 'black' }} />
+                        </button>
+                    </div>
+                </>
+            )}
         </div>
     );
-}
+};
 
 export default FetchDataComponent;

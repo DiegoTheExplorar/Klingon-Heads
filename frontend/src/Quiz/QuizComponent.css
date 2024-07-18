@@ -3,6 +3,30 @@
   flex-direction: column;
   align-items: center;
   padding: 10px;
+  justify-content: 'center'; 
+  height: '100vh';
+}
+
+.quiz-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.timer-container {
+  font-size: 18px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.timer {
+  display: flex;
+  align-items: center;
+}
+
+.timer-icon {
+  margin-right: 5px;
 }
 
 .progress-bar {
@@ -17,7 +41,7 @@
 
 .progress {
   height: 100%;
-  background-color: #76c7c0;
+  background-color: red;
   border-radius: 10px 0 0 10px;
   transition: width 0.3s ease-in-out;
 }
@@ -26,6 +50,9 @@
   font-size: 18px;
   margin-bottom: 20px;
   text-align: center;
+  justify-content: right;
+  display: inline-flex;
+  align-items: right;
 }
 
 .modal-backdrop {
@@ -56,7 +83,7 @@
 
 .spinner {
   border: 12px solid #f3f3f3; /* Light grey */
-  border-top: 12px solid #3498db; /* Blue */
+  border-top: 12px solid red; /* Blue */
   border-radius: 50%;
   width: 80px;
   height: 80px;
@@ -109,4 +136,23 @@
     height: 50px;
     border-width: 6px;
   }
+}
+
+.back-button {
+  position: fixed;
+  left: 10px;
+  top: 10px;
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  line-height: 1;
+}
+
+.back-icon {
+  font-size: 1.5em;
+  margin-right: 5px;
 }

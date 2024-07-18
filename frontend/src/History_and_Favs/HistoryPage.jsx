@@ -1,9 +1,6 @@
 import removeIcon from '@iconify-icons/ic/twotone-close';
-import arrowBack from '@iconify-icons/mdi/arrow-back';
 import { Icon } from '@iconify/react';
-import { getAuth } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { getHistory, removeHistoryFromFirestore } from '../FireBase/firebasehelper';
 import './HistoryPage.css';
 
@@ -12,8 +9,6 @@ function HistoryPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [filter, setFilter] = useState('all'); // State to manage filter selection
-    const navigate = useNavigate();
-    const auth = getAuth();
 
     useEffect(() => {
         getHistory().then(hist => {
@@ -51,10 +46,6 @@ function HistoryPage() {
 
     return (
         <div className="history-page">
-            <button className="back-button" onClick={() => navigate('/translator')}>
-                <Icon icon={arrowBack} className="back-icon" />
-                Back to Translator
-            </button>
             <img src="/Klingon-Heads-Logo.png" alt="Klingon Heads Logo" className="logo" />
             <h2 className="history-header">History</h2>
             <div className="filter-buttons">

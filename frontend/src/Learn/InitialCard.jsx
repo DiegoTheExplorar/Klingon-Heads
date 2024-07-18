@@ -11,7 +11,7 @@ function InitialCard({ flashcard, fetchFlashcard }) {
             case 'Medium':
                 return { backgroundColor: 'orange' };
             case 'Hard':
-                return { backgroundColor: 'red' };
+                return { backgroundColor: 'lightcoral' };
             default:
                 return {};
         }
@@ -30,22 +30,25 @@ function InitialCard({ flashcard, fetchFlashcard }) {
             <div onClick={handleCardClick} className="card">
                 <div className="card-front">
                     <img src="/Klingon-Heads-Logo.png" alt="Klingon Heads Logo" style={{ width: '40%', height: '50%' }} />
+                    Click here to learn new Klingon Phrases!
                 </div>
             </div>
         );
     }
 
     return (
-        <div onClick={handleCardClick} className={`card ${isFlipped ? 'flipped' : ''}`}>
+        <div>
+          <h2 style={{fontSize: '24px', fontWeight: 'bold', textAlign: 'center'}}>{flashcard.difficulty}</h2>
+          <div onClick={handleCardClick} className={`card ${isFlipped ? 'flipped' : ''}`}>
             <div className="card-front" style={getCardStyle(flashcard.difficulty)}>
-                <p>{flashcard.english}</p>
+              <p>{flashcard.english}</p>
             </div>
             <div className="card-back" style={getCardStyle(flashcard.difficulty)}>
-                <p>{flashcard.klingon}</p>
-                <p>{flashcard.difficulty}</p>
+              <p>{flashcard.klingon}</p>
             </div>
+          </div>
         </div>
-    );
+      );
 }
 
 export default InitialCard;

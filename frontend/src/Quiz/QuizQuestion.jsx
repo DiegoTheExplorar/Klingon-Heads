@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import './QuizQuestion.css';
+import { Icon } from '@iconify/react';
+import timerIcon from '@iconify-icons/mdi/timer';
+
 const time = 15;
+
 function QuizQuestion({ question, options, correctIndex, onAnswerSubmit, onNextQuestion, currentNumber, totalQuestions, onTimeUp }) {
   const [selectedOption, setSelectedOption] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -46,10 +50,13 @@ function QuizQuestion({ question, options, correctIndex, onAnswerSubmit, onNextQ
 
   return (
     <div>
-    <div className="timer">Time Remaining: {timer}s</div>
+    <div className="timer">
+      <Icon icon={timerIcon} className="timer-icon" />
+      <h3>{timer}s</h3> 
+    </div>
     <div className="question-container">
       <div className="question-box">
-        <h3>{question}</h3>
+      <h3 className="question">{question}</h3>
         {options.map((option, index) => (
           <div key={index} className={`option ${selectedOption === option ? 'selected' : ''} ${isSubmitted && (index === correctIndex ? 'correct' : (selectedOption === option ? 'incorrect' : ''))}`}>
             <button onClick={() => handleOptionSelect(option)} disabled={isSubmitted} className={selectedOption === option ? 'selected' : ''}>
