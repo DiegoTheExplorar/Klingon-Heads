@@ -12,7 +12,6 @@ import React, { useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Tesseract from 'tesseract.js';
 import { addFavoriteToFirestore, addHistoryToFirestore, checkFavoriteInFirestore, removeFavoriteBasedOnInput } from './FireBase/firebasehelper';
-import Modal from './Modal/Modal';
 import './Translator.css';
 
 function Translator() {
@@ -250,10 +249,7 @@ function Translator() {
           <button className="fav-button" onClick={isFavourite ? removeFavourite : handleFavourite} data-testid="fav-button">
             <Icon icon={heartIcon} className="fav-icon" style={{ color: isFavourite ? 'red' : 'black' }} />
           </button>
-          <CopyToClipboard text={translation} onCopy={() => {
-            setModalMessage('Copied!');
-            setShowModal(true);
-          }}>
+          <CopyToClipboard text={translation} onCopy={() => alert('Copied!')}>
             <Icon icon={copyIcon} className="copy-button" data-testid="copy-button" />
           </CopyToClipboard>
           <button className="speaker-button" onClick={handleTextToSpeech}>
@@ -262,9 +258,6 @@ function Translator() {
         </div>
       </div>
     </div>
-    <Modal showModal={showModal} onClose={() => setShowModal(false)}>
-  {modalMessage}
-</Modal>
     </div>
   );
 }
