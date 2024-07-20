@@ -1,0 +1,43 @@
+.next-button {
+    font-size: 1.5em;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    line-height: 1;
+    justify-content: center;
+    margin: 0 10px;
+}
+  
+.next-icon {
+    font-size: 1.5em;
+    margin-right: 10px;
+}
+
+.favs-button {
+    font-size: 1.5em;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    line-height: 1;
+    justify-content: center;
+    margin: 0 10px;
+}
+  
+.favs-icon {
+    font-size: 1.5em;
+    margin-left: 10px;
+}
+  
+.favs-icon.filled {
+    color: red;
+}
+
+.button-container {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    flex-direction: row;
+    justify-content: center;
+}

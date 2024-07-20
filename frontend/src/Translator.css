@@ -28,50 +28,9 @@ header {
 }
 
 .logo {
-  height: 175px; /* Adjust the logo size as needed */
+  height: 175px;
 }
 
-
-.user-icon-container {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  cursor: pointer;
-}
-
-.user-profile-pic {
-  width: 24px; /* Adjust the width to your preference */
-  height: 24px; /* Adjust the height to your preference */
-  border-radius: 50%; /* Ensures the image is circular */
-}
-
-
-.user-icon {
-  width: 40px;
-  height: 40px;
-}
-
-.dropdown-menu {
-  position: absolute;
-  right: 0;
-  top: 100%;
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-}
-
-.dropdown-menu button {
-  background: none;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-  width: 100%;
-  text-align: left;
-}
 
 .translation-container {
   display: flex;
@@ -85,12 +44,12 @@ header {
 
 .english-input-container {
   width: 50%;
-  position: relative; /* Add position relative for positioning mic button */
+  position: relative;
 }
 
 .klingon-output-container {
   width: 50%;
-  position: relative; /* Add position relative for positioning fav button */
+  position: relative;
 }
 
 .english-input-container label,
@@ -108,6 +67,7 @@ header {
   border: 1px solid #ccc;
   background: #fff;
   color: black;
+  resize: none;
 }
 
 .clear-button{
@@ -129,6 +89,21 @@ header {
 }
 
 .mic-icon {
+  width: 24px;
+  height: 24px;
+  color: black;
+}
+
+.camera-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  bottom: 0px;
+  right: 40px;
+}
+
+.camera-icon {
   width: 24px;
   height: 24px;
   color: black;
@@ -163,13 +138,14 @@ header {
 }
 
 
-.swap-button {
-  position: absolute; 
-  top: 50%; 
-  left: 50%; 
-  transform: translate(-50%, -50%); 
+.swap-button,
+.translate-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   padding: 10px;
-  background-color: #F8EDDF;
+  background-color: #f8eddf;
   color: #000;
   border: none;
   border-radius: 50%;
@@ -178,12 +154,13 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 60px; 
-  width: 60px; 
+  font-size: 60px;
+  width: 60px;
   height: 60px;
 }
 
-.swap-button:hover {
+.swap-button:hover,
+.translate-button:hover {
   color: #333;
 }
 
@@ -204,5 +181,20 @@ header {
 .footer-icon {
   width: 50px;
   height: 50px;
+  color: black;
+}
+
+.speaker-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  bottom: 10px;
+  right: 50px; 
+}
+
+.speaker-icon {
+  width: 24px;
+  height: 24px;
   color: black;
 }

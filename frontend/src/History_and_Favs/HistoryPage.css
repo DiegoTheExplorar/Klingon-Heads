@@ -1,0 +1,168 @@
+html, body {
+    background-color: #f8eddf;
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    color: black;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.history-page {
+    text-align: center;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    margin: 1rem auto;
+    box-sizing: border-box;
+    min-height: 100vh;
+}
+
+.logo {
+    height: 175px;
+}
+
+.history-header {
+    font-size: 2.5em;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: black;
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1rem;
+}
+
+.filter-button {
+    padding: 10px 20px;
+    border: 2px solid black;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #f8eddf;
+    color: black;
+}
+
+.filter-button.selected {
+    background-color: red;
+    color: white;
+}
+
+.history-table {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    max-height: 400px; /* Set a fixed height for the table container */
+    overflow-y: auto; /* Make the container scrollable */
+    scrollbar-width: none; /* Hide scrollbar in Firefox */
+}
+
+.history-table::-webkit-scrollbar {
+    display: none; /* Hide scrollbar in WebKit browsers */
+}
+
+.history-table-column {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.history-item {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.history-input {
+    width: 50%;
+    text-align: left;
+}
+
+.history-output {
+    width: 50%;
+    text-align: right;
+    color: red;
+}
+
+.remove-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.remove-icon {
+    font-size: 1.5em;
+    color: black;
+}
+
+.back-button {
+    position: fixed;
+    left: 10px;
+    top: 10px;
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    line-height: 1;
+}
+
+.back-icon {
+    font-size: 1.5em;
+    margin-right: 5px;
+}
+
+.user-icon-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.user-profile-pic {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+}
+
+.user-icon {
+    width: 40px;
+    height: 40px;
+}
+
+.dropdown-menu {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    width: 100px;
+}
+
+.dropdown-menu button {
+    background: none;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+}

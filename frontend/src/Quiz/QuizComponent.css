@@ -1,0 +1,158 @@
+.quiz-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  justify-content: 'center'; 
+  height: '100vh';
+}
+
+.quiz-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.timer-container {
+  font-size: 18px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.timer {
+  display: flex;
+  align-items: center;
+}
+
+.timer-icon {
+  margin-right: 5px;
+}
+
+.progress-bar {
+  width: 100%;
+  max-width: 400px;
+  height: 20px;
+  background-color: #e0e0e0;
+  border-radius: 10px;
+  margin: 20px 0;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background-color: red;
+  border-radius: 10px 0 0 10px;
+  transition: width 0.3s ease-in-out;
+}
+
+.score-tracker {
+  font-size: 18px;
+  margin-bottom: 20px;
+  text-align: center;
+  justify-content: right;
+  display: inline-flex;
+  align-items: right;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+  max-width: 500px;
+  box-sizing: border-box;
+}
+
+.spinner {
+  border: 12px solid #f3f3f3; /* Light grey */
+  border-top: 12px solid red; /* Blue */
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+  .progress-bar {
+    width: 90%;
+  }
+
+  .score-tracker {
+    font-size: 16px;
+  }
+
+  .modal-content {
+    width: 90%;
+    padding: 15px;
+  }
+
+  .spinner {
+    width: 60px;
+    height: 60px;
+    border-width: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .progress-bar {
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  .score-tracker {
+    font-size: 14px;
+  }
+
+  .modal-content {
+    width: 90%;
+    padding: 10px;
+  }
+
+  .spinner {
+    width: 50px;
+    height: 50px;
+    border-width: 6px;
+  }
+}
+
+.back-button {
+  position: fixed;
+  left: 10px;
+  top: 10px;
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  line-height: 1;
+}
+
+.back-icon {
+  font-size: 1.5em;
+  margin-right: 5px;
+}
