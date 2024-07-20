@@ -1,0 +1,27 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  z-index: 1000;
+  padding-top: 20px;
+}
+
+.modal-content {
+  padding: 10px 20px; /* Adjust padding for the message */
+  border-radius: 8px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  background: transparent; /* Remove background color */
+  color: #0f0f0f; /* Ensure text is visible; adjust as needed */
+}
+
+@media (max-width: 600px) {
+  .modal-content {
+    width: 90%; /* Adjust width for small screens */
+  }
+}

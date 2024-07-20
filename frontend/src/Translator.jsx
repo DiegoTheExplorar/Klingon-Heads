@@ -1,4 +1,3 @@
-import axios from 'axios';
 import closeIcon from '@iconify-icons/ic/twotone-close';
 import translateIcon from '@iconify-icons/mdi/arrow-forward';
 import cameraIcon from '@iconify-icons/mdi/camera';
@@ -8,10 +7,12 @@ import microphoneIcon from '@iconify-icons/mdi/microphone';
 import swapIcon from '@iconify-icons/mdi/swap-horizontal-bold';
 import speakerIcon from '@iconify-icons/mdi/volume-high';
 import { Icon } from '@iconify/react';
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Tesseract from 'tesseract.js';
 import { addFavoriteToFirestore, addHistoryToFirestore, checkFavoriteInFirestore, removeFavoriteBasedOnInput } from './FireBase/firebasehelper';
+import Modal from './Modal/Modal';
 import './Translator.css';
 
 function Translator() {
@@ -22,8 +23,8 @@ function Translator() {
   const [isFavourite, setIsFavourite] = useState(false); // State for favourite button
   const [isListening, setIsListening] = useState(false);
   const [speechRecognition, setSpeechRecognition] = useState(null);
-
-
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
   useEffect(() => {
     if ('webkitSpeechRecognition' in window) {
       const recognition = new window.webkitSpeechRecognition();
@@ -249,7 +250,10 @@ function Translator() {
           <button className="fav-button" onClick={isFavourite ? removeFavourite : handleFavourite} data-testid="fav-button">
             <Icon icon={heartIcon} className="fav-icon" style={{ color: isFavourite ? 'red' : 'black' }} />
           </button>
-          <CopyToClipboard text={translation} onCopy={() => alert('Copied!')}>
+          <CopyToClipboard text={translation} onCopy={() => {
+            setModalMessage('Copied!');
+            setShowModal(true);
+          }}>
             <Icon icon={copyIcon} className="copy-button" data-testid="copy-button" />
           </CopyToClipboard>
           <button className="speaker-button" onClick={handleTextToSpeech}>
@@ -258,6 +262,9 @@ function Translator() {
         </div>
       </div>
     </div>
+    <Modal showModal={showModal} onClose={() => setShowModal(false)}>
+  {modalMessage}
+</Modal>
     </div>
   );
 }
