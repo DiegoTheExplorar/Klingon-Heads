@@ -24,6 +24,7 @@ function Translator() {
   const [speechRecognition, setSpeechRecognition] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
+  const apiKey = import.meta.env.VITE_HF_KEY;
   useEffect(() => {
     if ('webkitSpeechRecognition' in window) {
       const recognition = new window.webkitSpeechRecognition();
@@ -86,7 +87,7 @@ function Translator() {
       try {
         const response = await axios.post(url, data, {
           headers: {
-            Authorization: `Bearer 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`,
+            Authorization: `Bearer ${apiKey}`,
             'Content-Type': 'application/json',
           },
         });
