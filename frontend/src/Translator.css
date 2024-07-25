@@ -31,24 +31,19 @@ header {
   height: 175px;
 }
 
-
 .translation-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
-  width: 200%;
+  width: 100%;
   position: relative;
-  gap: 8rem;
+  gap: 2rem; /* Adjusted gap */
 }
 
-.english-input-container {
-  width: 50%;
-  position: relative;
-}
-
+.english-input-container,
 .klingon-output-container {
-  width: 50%;
+  width: 100%;
   position: relative;
 }
 
@@ -70,7 +65,7 @@ header {
   resize: none;
 }
 
-.clear-button{
+.clear-button {
   background: none;
   border: none;
   cursor: pointer;
@@ -118,7 +113,7 @@ header {
   right: 10px;
 }
 
-.copy-button{
+.copy-button {
   background: none;
   border: none;
   cursor: pointer;
@@ -136,7 +131,6 @@ header {
 .fav-icon.filled {
   color: red;
 }
-
 
 .swap-button,
 .translate-button {
@@ -190,11 +184,35 @@ header {
   cursor: pointer;
   position: absolute;
   bottom: 10px;
-  right: 50px; 
+  right: 50px;
 }
 
 .speaker-icon {
   width: 24px;
   height: 24px;
   color: black;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .translation-container {
+    flex-direction: column;
+    gap: 2rem; /* Adjusted gap for stacked layout */
+  }
+
+  .english-input-container,
+  .klingon-output-container {
+    width: 100%;
+  }
+
+  .swap-button,
+  .translate-button {
+    position: static;
+    margin: 1rem 0;
+    transform: none;
+    width: auto;
+    height: auto;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+  }
 }
