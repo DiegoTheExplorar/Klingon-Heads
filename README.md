@@ -1,4 +1,4 @@
-# Klingon Heads - Milestone 3
+# Klingon Heads
 
 **Project Title**: Klingon Heads  
 **Authors**: Arvind Natarajan, Sivakumar Karthikraj  
@@ -33,7 +33,7 @@ Our initial approach involved training a GRU-based sequence-to-sequence (seq2seq
 - **Overfitting**: Despite experimenting with various regularization techniques (e.g., dropout, weight decay) and adjusting the learning rates, the GRU model consistently overfitted to the training data. This led to poor generalization on unseen data.
 - **Hyperparameter Tuning**: Extensive hyperparameter tuning was conducted, including adjustments to the number of layers, units per layer, and learning rate schedules. Unfortunately, these efforts did not yield significant improvements in model performance.
 
-Given these challenges, we eventually transitioned to using the T5 Transformer model for better performance, especially with the use of mixed precision training on more powerful hardware.
+Given these challenges, we eventually transitioned to using the T5 Transformer model for better performance, especially with the use of mixed precision training on more powerful hardware.  You may still find our code for the GRU models on backend(scrapped) directory.
 
 ## Deployment
 
